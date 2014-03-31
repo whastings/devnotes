@@ -1,0 +1,359 @@
+"How fast are we going now?" by Steve Souders (Google)
+Users expect much faster page loads compared to expectations 10 years ago
+Slides available on his site
+Connection speeds in the US trail those in some other countries
+CHECK: httparchive.org
+  -His project that checks performance twice a month for the top 300K sites
+Video as part of page weight is up
+  -We need more best practices around video
+  -Some sites download video even when the user hasn't clicked "play"
+The number of DOM elements is highly-correlated to page load time
+Most popular browsers only download 6 requests in parallel per hostname
+  -So you don't want too many requests going to the same domain
+The percentage of resources with cacheable headers has DROPPED 4% over the last year in the top 1000
+Page redirects are costly
+His conclusion: No significant change in the adoption of best practices
+CHECK: Joshua Bixby's blog "Web Performance Today"
+window.onload doesn't equal user perception
+  -Sometimes it fires way before or way after the user can start interacting with the page
+  -But it's what everyone uses for measurement
+
+"Sane Async Patterns" by Tervor Burnham (HubSpot)
+Wrote "Async JavaScript"
+Thesis: Callback arguments are harmful
+  -Alternatives are PubSub, Promises, AMD
+In JS, you need to watch out for the callback "Pyramid of Doom"
+PubSub: Same thing as when you subscribe to DOM events with jQuery
+  -Is a versatile pattern
+  -Should be used instead of callback arguments
+  -CHECK: EventEmitter library: github.com/wolfy87/eventemitter
+    -Can create and emit custom events that others can subscribe to
+  -CHECK: LucidJS github.com/RobertWHurst/LucidJS
+  -Problem: No standard
+Promises: Represents the eventual value returned from the single completion of an operation
+  -Is an object that emits an event when an async task completes or fails
+  -jQuery ajax calls return promises
+    -e.g. var promise = $.get(url);
+    -Can pass handling function to promise's done() and fail() methods
+    -Can get promise's state (e.g. pending) with state() method
+    -Can also get a promise from a jQuery object when it's performing an animation by calling the object's promise() method
+  -A promise is a read-only copy of a Deferred
+  -Can create with $.Deferred().
+  -Can trigger success with deferred.resolve(data);
+  -Can trigger failure with deferred.reject();
+  -Can get a promise from it with deferred.promise();
+  -jQuery's $.when() takes two or more promises and returns a combined promise
+  -Syntax: $.when(promise1, promise2).then(function);
+  -Piping Promises: The promise.pipe() takes a function that returns a promise
+    -The promise returned by pipe() will resolve when the promise returned by its function resolves
+  -deferred.notify() allows you to notify observers of progress
+  -Problem: There's no standard (e.g. jQuery has its own implementation)
+AMD: Deals with loading dependencies
+  -Based on a specification
+  -Can load dependencies async and not until needed
+  -Can inject dependencies for tests
+  -Uses a define() function to declare a module and its dependencies
+  -Problems: Also no standard, lots of upfront work, no versioning of dependencies, needs a heavy tool like RequireJS
+  -Keeps you from having to worry about what order your modules appear in
+Browserify: Alternative to AMD, tries to make browser modules similar to Node modules
+  -Good for browsing things together, but not for async loading
+  -Does support semantic versioning
+When you're writing a function/method, try to use a solution other than callback arguments
+
+"Integrating Modernizr 3 Into Your Workflow" by Alex Sexton
+CHECK: alexsexton.com/blog
+Helps deal with fragmentation (screen sizes, APIs, speeds, etc.)
+Is an object with a bunch of booleans on it
+  -e.g. if (Modernizr.geolocation) ...
+Helps you "modernize" your thinking process
+  -You use it to customize the experience of your site based on the browser's capability
+  -Detects features for you
+Used by Twitter, Microsoft, and Google
+Can detect CSS3 features (e.g. gradients) so you can provide fallbacks
+  -e.g. .no-cssgradients .mybutton { ... }
+Better than relying on browser sniffing
+Polyfill: A fancy word for "shim"
+  -Provides a newer native browser feature to older browsers that don't support it
+  -Myth: You can use as many as you need to "upgrade" an old browser to new capabilities
+  -Best usage is between using them for everything and never using them
+Going to come with a new AMD-based build system
+  -Will let you build a custom version that only provides the tests that you need
+  -Is open-source and runs build and minification IN THE BROWSER
+    -Can check out on GitHub: github.com/modernizr/modernizr.com
+    -Uses UglifyJS in the browser
+Will have a new version of YepNope (JS library that helps you load resources based on what tests pass)
+  -See Modernizr.load()
+Will be able to put into build process with modernizr Node module
+  -Can specify project options in modernizr.json
+    -Will let you specify what features you want to test and help you build custom modernizr: modernizr modernizr.json > modernizr.custom.js
+  -Can be installed via npm
+Bonus: Callbacks for async tests
+Will be coming in next few months, after docs are updated
+Suggestion: Define "tiers" of performance (e.g. HD, Standard, LowRes) and load different builds of your app based on the tier determined by tests
+  -Develop with builds in mind
+Load the absolute minimum on pageload, then lazy-load more stuff afterwards
+  e.g. When a button will trigger a behavior that requires a resource, start that load when the mouse gets close to the button
+Advice: Don't worry about identical experience, worry about appropriate and performant experience
+SLIDES: alexsexton.com/talks/modernizr-3-workflow
+
+"Slaying the Dragon: How to Refactor CSS for Maintainability" by Alicia Liu
+Use a preprocessor: variables, calculations, mixins, etc.
+A Style Guide is your map: naming conventions, pixels vs ems, if IDs are allowed and when, whitespace
+Naming
+  -Be specific to reduce chance of name collisions
+  -Separate behavior:
+    -Prefix classes that are for JS (e.g. js-classname) or just use data attributes for JS and no classes
+  -Name based on functional attributes, not stylistic appearance (e.g. danger-alert instead of red-alert)
+Organization:
+  -Use separate files but aggregate them for production
+Bad CSS smells: !important, overly-specific selectors
+Suggestion: Don't try to do refactoring all at once.
+
+"A performance checklist for the mobile web" by Colt McAnlis (Google)
+Google+ performance community: goo.gl/dq2V2
+#perfmatters: Hash tag for performance.
+Stat: 50% of users will leave a site if it doesn't load within 3 seconds
+Web performance isn't just about how fast your page loads initially, but how smooth the user experience is
+3 Pillars of Web Performance: Network, Compute, Render
+3G internet maxs out at 3mbps
+The radio in a cell phone takes about 1-2 seconds to move from idle to active
+WebP: New image compression technology for the web
+  -Can do even better than JPEG
+  -But only on Chrome right now
+Serving content with gzip over a spdy connection is like taking a 256K js file to 36K
+CHECK: PageSpeed, a tool for analyzing a site's performance
+Watch out for heavy CSS paint times
+  Different inputs on the same property can have drastically different effects
+  And combining CSS properties can have a non-linear increase in Render Weight
+Don't resize image on the client; server them at the appropriate size
+Try to avoid document reflows (layout recalculated, often when size of an element is changed)
+CHECK: chrome://tracing in Chrome
+  -Visit it, start recording, do stuff on your site, then come back to see where heavy computes happen
+Try to strive for Static Memory JavaScript: Where you've got just the objects you need loaded and staying in memory
+  -You don't want to be creating and losing too many objects because it'll slow down the page due to garbage collection
+  -Once you have a set amount of objects, the garbage collector won't have to run as much
+  -For arrays/collections, preallocate your size whenever you know what size you'll need
+  -Object pools: Allocating objects ahead of time and keeping them in a pool till you need them
+    -When you need them, you grab them from the pool, then put them back when you're done
+    -CHECK: Linear growth array
+Chrome DevTools has a CPU Profile and Memory Profile for analyzing your performance
+Checklist
+  -Use advanced image compression (e.g. WebP)
+  -Use transfer enhancements like SPDY and gzip
+  -Batch your network connections to get as much in before the radio turns off
+  -Scale down images
+  -Batch reads and writes to/from the DOM
+  -Try to achieve static memory usage
+CHECK: Devtools debugging on Android Chrome goo.gl/QJoq9
+His blog: mainroach.blogspot.com; His Twitter: @duhroach
+
+"Pro JavaScript Debugging" by Ashutosh Sharma (Adobe)
+Him: deceptiveweb.com / @zorder
+In DevTools, press F11 to jump to a function/method definition
+Source Maps: Helps you debug compiled or aggregated JS and CSS
+  -Can be generated by Closure Compiler, JSMin SourceMaps plugin for Grunt, UglifyJS
+  -Can enable it in DevTools in General Settings
+DOM breakpoints
+  -Can set to break on DOM mutation or attribute change
+  -Right-click on DOM element in Elements and go to "Break on..." menu
+MutationObservers let you observe DOM changes from your JS
+  -e.g. var observer = new WebKitMutationObserver(function);
+Object.observe is a proposal to track when object or its properties change
+Event Listener Breakpoints allow you to jump to handler for a kind of event
+  -You can also set them on a specific element when you have it selected in Elements
+Conditional Breakpoints: Will only break if a given condition is true
+  -To use, set a breakpoint on a line, then right-click and select "edit breakpoint"
+  -Instead of a condition, you can make a console.log call to check out values
+CHECK: jsconsole.com
+Chrome can mimic many things: user agent, device metrics, geolocation, device orientation, touch events
+Helpful methods in the Console API:
+  -warn(), error() to change level of a logged message
+  -group() and groupEnd() to group batches of output
+  -trace() to dump the callstack
+  -assert() to test a conditional
+  -time() and timeEnd() to see how much time something takes
+Command-line API:
+  -$(selector) alias for document.querySelector (first matching element)
+  -$$(selector) alias for document.querySelectorAll (all matching elements)
+  -$_ = last selection
+monitorEvents(selector) will log events to console for a given DOM selection
+Keyboard shortcuts
+  - control + o: jump to sources file
+  - control + shift + o: jump to defined function in current file
+  - escape: bring up console
+WebWorkers are listed in a special Workers pane, which you can use to open a specific worker and debug it
+  -WebWorker js files aren't listed in the normal Sources list
+Chrome extensions
+  -jQuery Debugger: inspect selectors and watch elements
+debugger; is a statement you can place anywhere to trigger a breakpoint
+Chrome can disable caching for while you're developing
+console.log(JSON.stringify(object)); is a good way to see a whole object
+
+"JavaScript - The Real Bad Parts" by John K Paul (Conde Nast)
+Slides: johnkpaul.com/2013/html5devconf
+Twitter: @johnkpaul
+The real bad parts are difficult to understand concepts (and hard to explain)
+6 different ways to set "this": method call, baseless function call, call(), apply(), constructor with new, => (fat arrow)
+  -When calling a method, "this" is the object the method belongs to inside the method
+    -What's on the left hand side of the dot operator
+  -Baseless function call = method assigned to a different variable, separating it from its object
+    -e.g. var aFunction = object.method;
+      -If you then call aFunction(), "this" will be set to the global object (strict mode prevents this and throws an error instead)
+  - => is coming in ES6, is an operator that allows you to bind the "this" value in a function to the "this" value in its parent scope
+Prototypal inheritance makes code reuse easy
+  -Is about fallbacks: If an object doesn't have a property, fall back to its prototype
+  -Object.create is great way to create object with a given prototype, but isn't in IE below 9
+    -Can mimic it in lesser browsers
+  -2 different definitions of prototype:
+    -Property on a function (sets prototype property on objects created with it with new)
+    -Internal reference of every object to its fallback (__proto__)
+Coming in ES6, the new "let" keyword will give you block scope in JS
+  -Use instead of var when declaring a variable in a block
+Hoisting: Is like JS rewriting bits of your code
+  -Function declarations and variables are "hoisted" to the top of the scope they're in
+    -Function expressions are not hoisted
+
+"Setting disruptors to stun!" by Christian Heilmann (Mozilla)
+CHECK: storyofstuff.org
+"Fragmentation is a given"
+Had a lot of interesting things to say and quotes about planned obsolescence
+Right now, "we have an awesome overload"
+  -We have to impress the mainstream, not each other
+Ways to disrupt:
+  -Stop copying
+  -Go where others don't go
+
+"Web Design for Non-Designers" by Paul Trani (Adobe)
+Attractive things seem to be easier to use and to work better
+Layout: All about leading the eye to most important area
+  -Can be done by color, spacing, size
+  -Can be broken down by "reads": which element receives the first read?
+  -Order, variety
+  -People tend to look to the upper-lefthand corner first
+Contrast: Makes things easy to read, draws attention
+Symmetry: People find it attractive
+  -But can get boring with layout
+Tension: When things are tight, almost touching
+  -Usually not good unless done on purpose
+Balance: Similar to symmetry, but is about having things balance each other out
+Scale: How things are related by size
+Texture: Helps fill empty space when a design seems too empty
+Space: Makes things inside them more elegant
+  -Common mistake is to add too much or to not use enough
+Shape: Can have meaning (e.g. octogon = stop sign)
+  -Does the shape you've created mean what you intend?
+  -Sharp corners take focus outside of a container
+Golden Ratio: 1:1.618
+  -In a nutshell: don't split your content right down the center
+Color: Use it to emphasize importance, not to decorate
+  -Colors have complements, opposites that create a nice balance
+    -Usually a warm color and a cool one, as well as opposites in intensity
+    -Can split the complement into two so that you can use one as secondary and one as highlight
+  -Blue is the most popular color, red stimulates excitement, yellow triggers focus
+Typography: Fundamentally, it is to convey info in writing
+  -So legibility is of prime importance.
+  -We break it down into hierarchies (headings)
+  -ADVICE: Don't use more than two or three fonts
+  -Choose a font that fits your subject
+  -Classifications include old style, transitional, modern, sans serif, script
+    -Most important are serif vs. san serif
+      -Many people pair a serif with a san serif for their fonts
+      -Serifs are easier to read in print, but san serif is easier on screen because they serifs can break down in pixels
+  -WhatFont: A chrome extension that will tell you what font is used on a page element
+  -ADVICE: Never have a line of text that's longer than a dollar bill
+    -If it's longer, break into columns
+
+"Making Peace with Twitter Bootstrap" by Melanie Archer
+Problems: bloated, too many classes, inflexible
+Can fix the bloat by customizing your download or customizing @import with the Less source
+Cloning Bootstrap with Git gives you the Less source
+  -Then you can remove unwanted @import statements from bootstrap.less
+    -Good to resave it first
+For the sass version, most use: github.com/jlong/sass-twitter-bootstrap
+Bootstrap via a CDN will be the whole thing
+You can change the class names bootstrap uses by defining your own name and using bootstrap's mixins to import the actual code
+  -e.g. You can alias .span8 with the .makeColumn(8) mixin, .row with .makeRow()
+CHECK: Bootsnipp, HTML snippets for Bootstrap
+
+"Getting Started w/ Responsive Web Design and Adobe Edge Reflow" by Brian Renaldi (Adobe)
+CHECK: His blog, remotesynthesis.com
+Comparison of responsive frameworks: responsive.vermilion.com/compare.php
+Adobe is coming out with Edge Reflow for visual responsive design
+  -Available with subscription to Creative Cloud
+Has tool panes for setting margins, paddings, columns, etc.
+Allows you to add gradients
+Can add a breakpoint at any width, then visually adjust the elements for where they should appear at that point
+The end result is a mockup better than a PSD because you can specify the design for any width
+  -Also, produces a file that has HTML and CSS, so easy to adapt to production code
+
+"Let Grunt do the work, focus on the fun!" by Dirk Ginader (Google)
+CHECK: ginader.com
+Created by Ben Alman a year ago
+Is a JavaScript task runner
+Written for Node
+Has been adopted by jQuery, Modernizr, Adobe, Twitter
+To install: npm install -g grunt-cli
+  -Allows grunt to be used with local version coming with the source project
+    -So everyone's using the same version
+package.json: name, version, author, dependencies, etc.
+  -the devDependencies section specifies all your project's node module dependencies
+  -"npm init" helps you create it
+To add Grunt to your project: npm install grunt --save-dev
+  -Saves it to your project
+  -"--save-dev" adds it as a dependency in your package.json
+Gruntfile.js: Where you tell Grunt what you want it to do
+  -Can load in data from package.json to use in configuration via variables
+  -Can specify which files to watch and what to do with them when they're saved
+  -Is written as a node module within a function passed to module.exports()
+Has an add-on for Uglify: npm install grunt-contrib-uglify
+"grunt-contrib-jshint" plugs JSHint into Grunt
+  -Can specify JSHint options in Gruntfile.js
+Can also minify CSS with grunt-contrib-cssmin
+Can also optimize images with imagemin
+  -3 is a good optimization level
+Can also run Sass compilation via Compass
+  -You can point it to your project's config.rb file
+grunt-contrib-concat is there for combining files
+
+"Testing in all browsers" by Kevin Nilson (just.me)
+His site: javaclimber.com
+Can run tests at build time or commit time, but a Continuous Integration system can be better
+  -e.g. Jenkins, CruiseControl, AnthillPro
+  -Can build and test on times and intervals you specify
+Unit Tests are quick and don't test dependencies, while Integration Tests are slower and do include dependencies
+JSUnit: An older test framework for JS
+Selenium:
+  -Can record tests with Firefox add-on
+  -Can have tests written in various languages: Ruby, Java, PHP, C#
+  -Can run on multiple browsers and platforms
+  -Problems: Can't write tests in JS, requires server with Selenium RC installed, doesn't do unit testing, is more for QAers than developers
+QUnit: Used by jQuery to test its code and plugins
+  -But must be embedded on the page you're testing
+  -Good for unit tests, but not integration
+FuncUnit: Part of JavaScriptMVC
+TestSwarm: Helps you control browsers on your network to have them run tests
+  -From Mozilla Labs
+  -Event supports mobile browsers
+  -Not too much adoption yet
+  -Can be used with browsers running in VirtualBox VMs
+  -Written in PHP and MySQL
+Jenkins: CI platform to run builds and deploy to test server, cron tyle
+  -Has lots of plugins
+  -Runs on Java
+  -Has built-in server or you can deploy to Tomcat
+  -Has plugin for TestSwarm
+TAP Protocol = Test Anywhere Protocol
+
+"Beyond Bootstrap" by Jason Wilkens and Josh Carver
+About taking Bootstrap to the next level
+You can do better than vanilla Bootstrap by customizing it
+Three things to customize: contrast, color, & size
+  -Contrast between light and dark areas is a great way to draw attention
+There are Bootstrap add-ons for Fireworks, Axure, and others
+  -Good for prototyping
+Recommends cloning the repo with the Less code over using the online customizer
+  -Can have one branch with default bootstrap and another with your customizations
+CHECK: PatternTap, library of UI and UX patterns
+60, 30, 10 Rule: Design rule that says to use three colors, with the first being 60%, the second 30%, and the third 10% of your UI
+CHECK: Color Scheme Designer
+
