@@ -1,0 +1,457 @@
+HTML5 Dev Conference Notes
+
+"Cache is King" by Steve Sounders, Google
+-JS has bigger impact on performance than CSS
+-Uses webpagetest.org
+-Check out: Alexa World Top 1000
+-Primed cache was twice as fast as no cache page view
+-Mobile networks have very high latency
+-How caching works:
+  -Browser performs GET request
+  -Server responds with resource
+  -Without caching, another visit will yield same result
+  -Conditional GET request allows caching:
+    -Server responds with "Last-Modified" or "Etag" header to enable caching
+    -Then on next visit, browser sends "If-Modified-Since" or "If-None-Match" (for etag)
+    -Server will respond with 304 not modified
+    -But even this takes time on high latency network (e.g. mobile)
+-Caching headers allow
+  -Using header: Cache-control: max-age=numSeconds
+    -Then, browser won't even request resource again, using cache instead, which eliminates an HTTP request
+-How to avoid caching when you need something to not be cached
+  -Cache-control: no-cache, must-revalidate, max-age=0
+-Be explicit about whether you want a resource cached or not
+-If caching, best to set long cache and change filename if file changes
+  -This helps with people using mal-configured proxies
+-25% of responses from top 1000 sites don't have explicit cache
+-57% of top 300,000 sites don't have explicit cache
+-To check out: httparchive.org
+-Heuristic Caching = Whatever caching users do when websites don't set cache explicitly
+  -The relevant RFC says make max-age 10% of time since resource's last modified
+    -So if you changed a resource 1 day ago, a user's browser will only cache it for 2 hour if you don't set max-age!
+  -And if you don't even send last-modified, browser has even harder job
+    -e.g. IE9 will check each resource once per session
+-Non-explicit cache = Resource response without no-cache or max-age
+-User problems
+  -About 30% have a full cache
+  -19% of users experience fatal cache corruption and need to start over
+-Solutions:
+  -You can use app cache with a manifest file to get dedicated cache for your site
+    -Usually get about 5mb of cache
+    -To get cache to update, you'll have to update your manifest file when you change something
+      -Browser has to read manifest file before knowing what to re-cache, so user won't get updated resource till 2nd page view
+      -There's a workaround using an "updateready" event listener
+  -There's also local storage API:
+    -Can be used to store JS and CSS as strings
+      -Security issue: 3rd party JS has access to same local storage
+-Slides available at stevesouders.com
+
+"Kicking Ass Continuously" by Adron Hall
+-You need to have continual feedback from your users
+-Practice "Continuous Delivery": Have something built that you can show someone with a very short time of starting a project (week or two)
+  -Keep continuously delivering things (iterations)
+  -Prioritize individuals and interactions over processes and tools
+-Respond to changes that customer wants rather than following a plan
+-Similar to the Agile Manifesto
+-You NEED to have tests; if one test fails, don't deploy
+-"Pairing" is important: Sit down with customers and dialog
+-Apache's Maven, RAKE (Ruby Make) and NAnt help with testing
+  -Travis is a tool that watches your git repo to make sure your build won't fail
+-Cloudfoundry: Open-source project from VMWare that supports SAAS for many languages
+-Amazon and Etsy use Continous Delivery to push changes all the time, without anyone noticing
+
+"HTML5 in a CMS" by Jennifer Lampton
+-Organized DrupalCon SF in 2010
+-Is BAD Camp organizer, module maintainer, trainer, and core initiative leader
+-For Drupal 8, looking to use Twig for theme layer
+-Drupal is a "Content Management Framework"
+-HTML5 for Drupal 8
+  -Will use HTML5 doctype
+  -Will start using header, nav, footer, etc.
+  -Will start using HTML5 form elements (e.g. email, url, telephone, etc) and form attributes (e.g. placeholder, required)
+  -No longer supporting IE6, considering dropping IE7
+  -Added HTML5 shiv and latest jQuery
+  -Trying to figure out what markup to wrap Fields, Views, Blocks in (nav? aside? div?)
+  -Wants to improve Fields UI
+  -Drupal 8 will work to make Blocks more like Panels
+-Feature freeze for Drupal 8 is Dec 1st, with expected release for Fall 2013
+-Views lets you choose to use custom HTML for fields that you display
+-Fields UI lets you choose wrapper markup when you edit a specific field
+-Will swap printing render elements out for Twig
+-Drupal distribution Spark uses panels to do responsive layouts
+  -Uses the Aloha wysiwig editor, which is the candidate wysiwyg for Drupal 8
+
+"JavaScript for Single Page Web Applications" by Michael Mikowski
+-manning.com/mikowski
+-SPA = single page application
+-Predicts we'll move from ajax to open sockets, which are faster and lighter
+-His book: "Single Page Web Applications - JavaScript End to End"
+-JS Advances
+  -Most browsers now stick to standards
+  -Comprehensive tools (e.g. jslint)
+  -Improved IDEs (check out WebStorm)
+  -Many quality libraries that do stuff you'd have to do by hand previously
+  -JS faster than Ruby, Python, and PHP
+-Key concepts for SPAs
+  -Much app logic moving from server to frontend (JS)
+  -SPAs are larger and often need multiple developers working concurrently
+  -Architecture:
+    -API calls should flow from user to server, and data flows from server to client
+      -Nothing should talk to anything behind it, only ahead of it
+  -Name your variables to indicate scope (e.g. _ in front of local variables)
+  -Have only one global variable for your app
+  -Also, name your variables to indicate type (e.g. user_list where list means array)
+    -Most variables in JS don't change type, and if they do it's usually a mistake
+  -Better to throw an exception than return false
+  -Always have functions return the same type (e.g. string always, not string then boolean)
+  -In JS, better to declare first in one var statement per function scope, then assign later
+    -e.g. var var1, var2, var3; var1 = blah;
+  -Hoisting: Variable declarations always "hoisted" to tope of function scope, but assignments are not
+    -So a var statement anywhere in function makes the variable available from the beginning of the function, so it's best to declare variables at beginning
+  -With JS prototypes, you need to explicitly declare prototype inheritance
+    -Prefers Object.create over new keyword
+  -The __proto__ variable store prototype internally, and hidden in some environments
+  -Use hasOwnProperty to see if object has property (not one of its prototypes)
+  -Execution Context: Whenever you call a function, and Execution Content object is created
+    -Object has function's local variables as its properties
+    -Also has any of function's local functions as its properties
+    -Is fundamental to how a lot of JS works
+    -Maintained until reference count falls to zero
+  -Closures:
+    -Don't declare functions in a loop
+    -Try to avoid declaring functions in other functions, which results in deep closures
+
+"Put Some Backbone.js in your Apps" by Sid Maestre
+-Helps you separate concerns, make code modular
+-The View listens passively for changes in the Model
+-Backbone depends on Underscore.js
+-Model: You create one with Backbone.Model.extend()
+  -You instantiate your model with new keyword
+  -toJSON() method will convert model object to JSON
+  -Has get() and set() methods for getting and setting properties of object by key
+  -You can pass an object literal to extend, with a defaults property setting default variable values of objects
+-Collections: Groupings of models
+  -Create with Backbone.Collection.extend
+  -Can pass extend an object literal
+    -Model property defines model for collection, url defines address for persistence
+  -Collection instances also create with new
+  -You can pass Collection's each method a function to run on each object in it
+  -Has add method to add objects to collection
+  -Has at method, which you pass an int for the index you want to retrieve
+-Views: Involves any visual element
+  -So you can have views within views
+  -Created with Backbone.View.extend
+  -The "el" property refers to the markup element the View encapsulates
+    -Defaults to empty div
+    -You can set it explicitly: e.g. el: "body"
+  -The "$el" property refers to the jQuery object for the View's el
+  -A view should have a render() method to add content to "el"
+    -Should return "this" so you can have method chaining
+  -Has initialize method that's run when view object created
+    -Might want to call this.render() inside
+-Templates: Uses underscore.js templating engine
+  -Put in script tag with type "text/template" and an id you can target
+  -Can assign it to a view with this.template = _.template(templateSelect.html());
+    -Can also pass model.toJSON() to _.template()
+-Router:
+  -Used to be called Controllers, but weren't exactly controllers
+  -Set with Backbone.Router.extend
+  -Routes can be visited by using # in URL
+    -Can make it a link and have something happen when route visited (e.g. load in a view)
+  -Can use Backbone.history.start() to have Backbone keep track of URL history for app
+-Events: Can have Views listen for events
+  -Set with object literal assigned to "events" property
+    -Syntax: "event #id" : methodToExecute (e.g. "click #myButton" : myMethod)
+  -You can bind a view to a collection so it will listen for events using collection's bind method
+  -With Backbone, a lot of controller logic in the Views
+-free course: bit.ly/freebackbonejs
+
+"Tactical HTML & CSS" by Shay Howe
+-Problem with websites: over time, files and codebase begin to swell
+-Bad practices: avoid extra elements, avoid classes, using huge css selectors
+-CSS specificity determines which styles are applied; good code has low specificity
+-Maintainable code is: organized, modular, and performant
+-Think from perspective of components, not pages
+-His organization: Base/core styles, Components (e.g. buttons, tooltips), & Modules (e.g. header, footer)
+-Check out: rdio (Spotify competitor)
+-Separate Layout from Presentation: Have layout css in one class (e.g. margins, width) and presentation/styling css in another (e.g. background and font color)
+-Keep elements from being dependent on parents: Instead of using descendent selector, create a class for it that's not bound to the parent
+-Instead of overriding a class (e.g. for a specific parent), just create another class that extends it, so your element will have class="base-class extended-class"
+  -e.g. an error alert could have class="alert alert-error"
+-Avoid IDs, !important, and nested selectors
+-Formula for measuring specificity: Number of IDs, Class/Pseudo-classes/attributes, elements
+-Resources: oocss.org and smacss.com
+-Aggregate files, use sprites, use data URIs
+-Checkout ImageOptim for Mac for lossless image trimming
+-Checkout: CSS Lint
+-Prefix classes for js with "js" (e.g. "js-alert") or use data attributes on elements
+
+"SPDY and the Road Towards Http 2.0" by Ilya Grigorik
+-Goals: Improve latency, require fewer connections, retain HTTP's 1.1 semantics
+-Will be backwards-compatible
+-Load times and users: 0-100ms seems instant, 100-300ms people start to perceive the wait, 300-1000ms user knows machine is working, 1 second + people start to think of something else
+-Average page on web today is 1mb+, 84 requests, 30+ hosts
+-Average bandwidth in US is only 6.7 mbps
+-"Latency is the new performance bottleneck"
+-HTTP 1.1 allows for multiple requests, but server can only fulfill one request at a time per connection
+  -So most browsers today open up to 6 connections per hostname
+  -But each new connection has a penalty
+-Looking to submit HTTP/2.0 as proposed standard in November 2014
+-SPDY is a starting point for HTTP/2.0
+-Will allow multiple resources at once, making workarounds (sprites, aggregation) less necessary
+-HTTP headers aren't compressed, but they are in SPDY
+-Server push: Idea that server can decide what resources to push to client
+-SPDY runs over TLS/SSL
+-Are SPDY modules for Apache (mod_spdy), node.js, and nginx
+  -Works for SPDY browsers, including Chrome and Firefox 13+, and falls back for others
+-Can get add-ons for browsers to show icon when a site is using SPDY
+-Checkout: chrome://net-internals
+
+"N Things You Didn't Know Sass & Compass Could Do" by Chris Eppstein
+-He started Compass
+-Interpolating a variable in a selector: e.g. ".button-#{$variable}"
+  -Anything in #{...} will be evaluated by Sass
+  -You can also @extend a selector that's evaluated by interpolation
+  -But you can't interpolate one variable into another, inside an import statement
+  -All @-* rules support interpolation
+-Comments
+  -// comments never go in output, but /*...*/ ones do
+  -Loud comment: one that won't go away even after you minify
+    -Syntax: /*!...*/
+-Placeholder selector: a selector for use with extending, but doesn't output in the final css
+  -Syntax: %selector
+-Compass doesn't define language features; they're all in Sass
+-You can write a function using @function
+  -Can do stuff like arithmetic inside
+  -Use @return to return a value
+-A mixin is like a function, but has to emit either properties or selectors
+  -Use in a rules declaration with @include mixin
+  -Can print content of calling code in a mixin with @content
+    -@include mixin { blah: blah } //mixin can print "blah blah" with @content
+-Can do basic math in property values
+-Can do conditionals with @if and @else
+-Can put a media query inside selectors or mixins or other media queries, and sass will move them out
+-Can use @each for looping in a foreach way
+-Can have variable arguments in a mixin: @mixin myMixin($arguments...) {
+  -$arguments will be a list
+-Can create a list (array) variable by separating values with commas
+  -e.g. $myVar: value1, value2, value3;
+  -Can get one value from list using the nth(list, index) function
+-Can use @include in property values
+-For sprites in Compass
+  -Only supports PNG for now
+  -Can @import all PNGs: @import "icon/*.png";
+    -Then "@include all-icon-sprites" writes all the css for the sprite
+    -Creates an on-the-fly Sass file defining all the sprites
+    -Define the sprite layout with values set to $spritename-layout
+      -Can have horizontal, vertical, smart (for images with different sizes), diagnol (for images that have to go in corners)
+-CharityWare: Donate to the United Mitochondrial Disease Foundation
+
+"Webapp Workflow & Yeoman" by Paul Irish
+-His bash prompt config and colors are customized (available on his GitHub as dotfiles)
+-Has gz alias for showing size of file when gzipped
+-In SSH's config file, you can set up aliases for quick login
+    -Use the alias keyword
+-When deploying with Git, you can have a deploy key, which is repository specific
+-EditorConfig: Tool for configuring editors and IDEs
+  -editorconfig.org
+  -Lets you configure whitespace for the files you edit (e.g. indent_style, indent_size)
+-Yeoman: Project to codify best practices in developer workflow
+  -Has open source frameworks, tools, and testing built in
+  -Has Compass, Sass, Boostrap, Boilerplate, Mocha, Grunt, etc.
+  -When calling init, asks you which tools and frameworks you want for your project
+  -Has install command for adding new stuff (e.g. JS libraries)
+  -Working to address package management for front end using Twitter Bower
+    -You can search for packages using the search command
+    -When you install a package, will auto download any dependencies
+    -ls will show you installed packages and if there are updates
+  -Generators: Customizable templates for starting projects
+    -Have them for backbone, ember, etc.
+  -@ yeoman.io
+-Check out: UglifyJS
+-Check out: Testacular
+-Check out: Testem, which runs tests from command line
+-Check out: browserstack.com for testing on other browsers, including many mobile
+-Chrome DevTools now has experimental support for live editing scss files
+-Check out: Guard, program for watching for files changing and running something against them when they do (e.g. Compass)
+-Checkout: html5please.com
+-Chrome DevTools can emulate touch events, user agent, screen size, geolocation
+
+"Meteor" by Matt DeBergalis
+-Uses MongoDB and Node.js
+-"The web is wearing out"
+  -Now that we're doing more on client side, there's more latency between the database and the application logic
+-Wants a new protocol that's better for real-time apps than HTTP and REST
+-What's the equivalent of HTTP for bi-directional JSON data?
+  -Should be session-based (not stateless)
+  -APIs should be "subscriptions to sets of data"
+-A Meteor server publishes sets of JSON documents (Meteor.publish)
+-Meteor found that WebSockets didn't work well for it
+  -Instead, uses HTTP techniques to transmit better
+-A Meteor client subscribes to document sets (Meteor.subscribe)
+  -Once it gets them, it can search them like a local db through its cache
+    -Can run MongoDB-like queries on local db
+  -Can update data set and request server to updated it
+    -Can set security policies to accept or reject client requests
+-Meteor keeps app state in sync across browser windows and users (autopublish package)
+-Has support for logging in (accounts-ui and accounts-password)
+-Uses Handlebars for HTML templating, but can use others
+
+"Broken Promises of HTML5 and What's Next" by Christian Heilmann
+-Many people are out to see HTML5 fail
+-HTML5 is backwards-compatible, has consistent markup processing
+-"It's not about what we can add, it is about what we can't take away"
+  -Includes: URLs, small footprints, offline storage, adaptation to environment
+-A webapp can't be like a native app, and comparing them is like apples to oranges
+-Firefox OS is built in HTML5, JS, and CSS
+  -Targeting markets where iOS and Android aren't affordable
+  -Can modify a lot of phone's OS using JS and HTML
+-Should support systems that convert to HTML5 (e.g. C++ to HTML5)
+-Don't get too carried away with abstraction (e.g. jQuery, Sass, Less)
+-Check out: Brackets, open-source editor by Adobe
+
+"Adventures in Single Page Web Apps" by Mikito Takada
+-Wrote free books
+  -singlepageappbook.com
+  -book.mixu.net (for Node.js)
+-Testing can be difficult for single page apps
+-Crawling can be harder for search engines
+-Says we need to get rid of MVC, namespaces, and templating (current best practices)
+  -Not necessarily productive to describe everything as MVC
+  -Controller = "A familiar word that makes writing glue code sound like design pattern."
+    -"Controllers must die"
+  -Instead, link Views and Models with events and API calls
+  -Namespaces create complexity because they're all dumped into the global space
+  -Templates are primitive: can't nest, must manually render, pass data, and bind
+-Complexity = code that has remote inputs or remote effects
+-Good code should be loaded and tested independently and should break independently
+-Modules are better than namespaces
+  -e.g. Check out: CommonJS or AMD
+  -Everything is private except what you choose to expose
+  -Dependencies managed through require()
+  -Can be put into packages (hierarchies of modules)
+    -Has one public interface for the package
+    -Can be loaded with one HTTP request
+  -Code that creates state should go in initialization code (e.g. init())
+    -Modules and packages should only define things, not create them
+  -Allows information hiding that works well
+  -Hides internals behind an interface
+-Check out: gluejs
+-Is working on View.JSON
+-View should subscribe to events of the Model; Model should publish events to View
+-Shim = small library that transparently intercepts API call and handles it
+  -Views should be objects (not template strings), using shims for rendering
+-Try to load least amount of code
+  -e.g. Load just your code package and package for the current URL
+-Snapshot = start running on server, then continue in browser
+-Prerendering = rendering page on server for first load
+
+"JavaScript for SPAs" by Mike Mikowski and Josh Powell
+-jsjoshing.com for Josh
+-A SPA is a website where the page doesn't reload
+-Websockets have much smaller headers than HTTP over AJAX
+-Can have jQuery, Node.js, and MongoDB for an all-JS stack
+  -Lets you use JSON as the single data format
+-Backend becomes your authentication, document store, and user db
+-These days, common to have JS apps over 100,000 lines of code
+-Helps to use camelCase for module-level variables
+-Hoisting happens because JS engines run over each function twice, once to declare variables and again to assign them
+-You can't actually access the Execution Object directly
+-Closures result from assignment
+  -You can return one function from another, and returned function will retain references to local variables from the function that returned it
+    -This is because the execution object is maintained
+-Block scope probably coming to JS, but don't count on it
+-Module pattern: Return an object from a self-executing function
+  -Create a namespace using one global variable, and have sub-namespaces, one per file, with files named after namespaces they contain
+
+"Mobile Development Options" by Pratik Patel
+-Focusing on iOS and Android
+-TripLingo builds foreign language learning apps
+-Startup Weekend = Hackathon to get stuff done over one weekend
+-Native mobile requires you know Objective-C or Java very well
+  -Must also know toolchain and SDK
+  -You have ability to create best possible app, but not cross-platform
+  -Doesn't have as high level of abstraction as web programming, so some things take longer
+-PhoneGap = Native wrapper that bootstraps a webkit browser
+  -Bundles mobile web apps as native apps
+  -Provides API for accessing platform (e.g. GPS, accelerometer)
+  -Runs in a native PhoneGap framework on the specific OS
+    -So you need native toolchain to build native wrapper
+  -Bought by Adobe, which is working on a cloud builder for PhoneGap Apps
+  -Is easiest for crossplatform apps
+  -Can do a lot of the development in desktop browser
+  -But PhoneGap gets performance hit for running browser code in a native wrapper
+    -Your code runs in webkit engine, which runs in PhoneGap wrapper, which runs in OS
+    -So better for simple to medium complexity
+-People usually use jQuery Mobile, Sencha Touch, Jo, or KendoUI to help with dev
+  -Sencha Touch and jQuery Mobile very popular
+  -KendoUI not free, but works very well
+  -There's also jqTouch, but it's slightly older
+  -Many of these libraries mimic native user interface components
+-App Dev Platforms: Bridge from another language to the native code
+  -Write hooks to access native APIs
+  -Includes Monotouch (C#), Appcelerator Titanium (JS)
+  -Instead of running webcode in browser engine, platform is goes between your code and native OS
+  -Can usually reuse most all non-ui code, and a lot of ui-code with experience
+    -Is where best practices help
+  -Is a bridge to native, not a code generator
+    -So if platform gives you a reference to a UI button, it's a real native button (not css)
+-Appcelerator Titanium: Provides a JS runtime with bindings to the native platform
+  -Is open-source and free
+  -Has Titanium Studio IDE based on Eclipse
+  -Your starter code goes in an app.js file
+  -Create a screen/window by passing JS object with options to Ti.UI.createWindow()
+    -Use add method of window object to add UI components to it
+  -Tends to do well with keeping up with new iOS versions
+  -Community does have some plugins to enhance it
+  -Is working on way to define UIs with XML
+  -Can use with libraries like Underscore, Backbone, and Ember
+-To use App Dev platform or PhoneGap seriously, you must know the native toolchain for your target platform
+  -Can help to try to make some of one native app in each platform before switching to one of these tools
+
+"The Future is Responsive" by Matt Kelly
+-Can't design a different interface for every device
+-Great design is about iteration
+-Responsive prototyping: Involves creating prototypes in code
+  -Helps you iterate faster
+  -Will have one codebase that works on many devices
+-Responsive design needs:
+  -Fluid grid system
+  -Media that doesn't worry about pixels
+  -Media queries to selectively adapt the page
+-Check out Foundation 3 (foundation.zurb.com)
+  -Is open source
+  -Has a 12 column grid
+  -On small screen, stacks columns on top of each other
+  -Can change ordering of columns with "push" and "pull" classes
+  -Also has a 4-column mobile grid
+  -Uses Sass
+  -Coming out with "Clearing" module for responsive image viewer
+  -Is more barebones than Bootrap, without a lot of prebuilt styling
+-"box-sizing: border-box" will cause padding to become part of element width
+  -Works everywhere (some vendor prefixes) except IE7
+-Icon fonts are good way to get vector graphics on a page
+  -"the new sprites"
+-SVG support is getting better
+
+"SASS, Compass, & the New Webdev Tools" Dirk Ginader
+-Didn't like css precompilers at first
+-But figured out how tedious browser prefixes are
+-Check out: LiveReload, for applying HTML, css, scss changes live
+  -Monitors files, processing them and refreshing browser when they change
+-Sass nesting even works within properties (e.g. nesting width: within border:)
+-When nesting, can use & as parent selector (e.g. &:hover)
+-Cool functions include: lighten, darken
+-Sass can convert between units like inches, pixels, and ems
+-Cool compass features include: fontface, opacity
+-ColorZilla's gradient generator can now generate sass code
+-Compass has clearfix built in
+  -newer version is "clearfix", older version is "pie-clearfix"
+-Compass will create an inline image (data URI) if you pass a file to the inline-image() function
+-Compass's image-width() function will print in CSS the width of image file you give it
+  -Or you can use its return value in a calculation
+-Check out: The FireSass extension for FireFox will let you edit scss in Firebug
+  -And there's Sass-Sleuth for webkit browsers
+-You can turn on Sass debugging in compass with: sass_options
+
+
