@@ -40,7 +40,21 @@ In binary arithmetic, you carry the 1 to the next digit if you get to 2
 - Each operation on something in memory takes *1 unit of time*
     + e.g. Read one memory location, read a second, add them together, save result to third location
 
-**Static Array**
+## Week 10 - Day 5
 
+More memory:
+- Allocating Memory:
+    + In C, you use `malloc` to get memory, and it returns starting address
+    + Fragmentation: When there aren't enough contiguous cells in memory to fullfil a request
+        * Stack allocation: Computer avoids this by deallocating freed memory in order from one end to another
+            - Has a stack pointer the points to the front of the stack
+            - Objects must be deallocated in correct order
+        * Heap allocation: Keeps notes of where free space ranges are
+            - Objects can be deallocated in any order
+            - But has more to keep track of
+    + So Ruby uses heap allocation to keep track of memory references to actual data in stack-allocated memory
+
+**Static Array**
+- Have to choose a fixed max size at the beginning and it can't resize
 
 **Dynamic Array** 
