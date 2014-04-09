@@ -54,7 +54,40 @@ More memory:
             - But has more to keep track of
     + So Ruby uses heap allocation to keep track of memory references to actual data in stack-allocated memory
 
+## Week 11 - Day 1
+
 **Static Array**
 - Have to choose a fixed max size at the beginning and it can't resize
+- Usually have to declare type of data to store and only store that type
+- Uses fixed, consecutive blocks of memory
+- Needs to keep track of total & filled length and where in memory items start
+- Lookup:
+    + When you give computer an index to retrieve, it computes the memory location that holds it
+        * e.g. `array[3]` is at `starting_pos` + (8 * 3)
+        * This is *pointer arithmetic* and is very fast
+- Assignment:
+    + Finds memory location just like lookup, so also very fast
+- Pushing & Popping:
+    + Popping is fast
+    + Pushing is fast
+        * Always adds new element at `starting_pos` + (8 * `filled_length`)
+            - Computer can calculate this super quickly, regardless of array size (constant time)
+
+## Week 11 - Day 3
 
 **Dynamic Array** 
+- Like static array, but can resize when it gets full
+- Resizing is slow
+    + Have to copy everything to new, bigger memory location
+    + Have to free old memory location to avoid memory leak
+    + Usually doubles space on each resize
+        * Keeps number of resizes to a minimum w/o wasting too much memory
+        * Keeps ratio of resize cost to time to next resize constant
+            - Cost of resize is proportional to length of array
+            - The benefit is number of new spaces created
+- Slow to insert between elements, as all elements after have to be moved over
+- Push is usually fast, unless resize needed
+    + Resize is a linear operation
+    + But total resize time increases as array length grows
+
+**Ammortization**: An amount spread out over a period of time
