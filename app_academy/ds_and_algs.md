@@ -91,3 +91,34 @@ More memory:
     + But total resize time increases as array length grows
 
 **Ammortization**: An amount spread out over a period of time
+
+## Week 11 - Day 5
+
+**Big O**
+- a.k.a **Asymptotic Time Complexity**
+- A way to classify algorithms based on how quickly they handle problems
+- Represent size of problem by variable `n`
+    + e.g. Number of items to process
+- Compares things that grow at *different rates*, not those that grow at the same rate
+- Represents a set of functions that *are within* the function described in the notation
+    + By *within*, we mean that the Big O function (`f`) *dominates* the represented functions (`g`)
+        * **Dominates** = One function's time grows faster than another's as problem size increases
+        * So the function represented by the Big O notation *is the worst case scenario*
+        * In Big O, `f` (e.g. `n^2`), *dominates/grows faster* than any of the functions that fall within its set/class
+
+**Complexity Classes**:
+- **Linear**: Grows at same rate as size of problem
+    + a.k.a. **O(n)**
+- **Exponential** 
+- **Logarithmic**
+    + Grows more slowly than problem size
+- **Quadratic**
+    + a.k.a. **O(n^2)**
+
+Different types of problems (classes) grow in difficulty at different rates as number of items increases
+- Some operations will grow in difficulty at faster rates
+    + So may start out faster than another operation, but will overtake and take longer than other as problem size grows
+- Can compare two operations with: `(time_op_1 * n) / (time_op_2 * n)`
+    + Gives you a ratio
+    + Approaches 0 as n approaches infinity
+
