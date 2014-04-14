@@ -92,7 +92,7 @@ More memory:
 
 **Ammortization**: An amount spread out over a period of time
 
-## Week 11 - Day 5
+## Week 11 - Day 5 through Week 12 - Day 1
 
 **Big O**
 - a.k.a **Asymptotic Time Complexity**
@@ -107,13 +107,41 @@ More memory:
         * In Big O, `f` (e.g. `n^2`), *dominates/grows faster* than any of the functions that fall within its set/class
 
 **Complexity Classes**:
-- **Linear**: Grows at same rate as size of problem
-    + a.k.a. **O(n)**
-- **Exponential** 
-- **Logarithmic**
+- **Constant Time**: Takes same amount of time regardless of problem time (fixed cost)
+    + a.k.a. **O(1)**
+    + e.g. Array index lookup, lookup in a Hash-based Set
+    + *Has the best performance*
+- **Logarithmic Time**
+    + a.k.a. **O(log(n))**
     + Grows more slowly than problem size
-- **Quadratic**
+    + e.g. Binary search, binary trees
+    + *Has great performance*
+        * If you double problem size, you only do one more unit of work
+- **Linear Time**: Grows at same rate as size of problem
+    + a.k.a. **O(n)**
+    + e.g. a loop
+    + *Has fair performance*
+        * If you double problem size, it's twice as hard
+- **Quadratic Time**
     + a.k.a. **O(n^2)**
+    + e.g. Pairs, loops inside loops
+    + May be able to improve by sorting
+        * e.g. Using two loops to solve the Two Sum problem is quadratic
+            - Could sort the array of numbers
+            - Then search with binary search for a number that produces 0 when added to current number
+            - Which gives you O(n log(n)) performance
+            - Can get even better (O(n)) by using a Hash for number lookup
+    + *Has poor performance*
+        * If you double problem size, it's four times as hard
+- **Exponential Time**
+    + a.k.a. **O(2^n)**
+    + e.g. Subsets
+    + *Has terrible performance*
+        * If you increase problem size by one, it's twice as hard 
+- **Factorial Time**
+    + a.k.a. **O(n!)**
+    + e.g. Permutations
+    + *Has the worse performance*
 
 Different types of problems (classes) grow in difficulty at different rates as number of items increases
 - Some operations will grow in difficulty at faster rates
@@ -121,4 +149,12 @@ Different types of problems (classes) grow in difficulty at different rates as n
 - Can compare two operations with: `(time_op_1 * n) / (time_op_2 * n)`
     + Gives you a ratio
     + Approaches 0 as n approaches infinity
+
+**Multi-Class Problems**: The solutions for some problems are composed of smaller operations that have different complexities
+- **O(n(log(n)))**: Part of solution is linear, part is logarithmic
+    + Can come up in a sorting algorithm like *merge sort*
+    + *Has okay performance*
+    + Can improve to linear time by avoiding sorting
+
+
 
