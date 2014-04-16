@@ -156,5 +156,23 @@ Different types of problems (classes) grow in difficulty at different rates as n
     + *Has okay performance*
     + Can improve to linear time by avoiding sorting
 
+## Week 12 - Day 3
+
+The best performance you can get with sorting is O(nlog(n))
+- Bubble Sort is O(n^2)
+    + Can optimize, for example, by checking one less element from the end on each round
+        * But can never get better than O(n^2)
+- Merge Sort is O(nlog(n))
+    + The splitting part is O(log(n))
+    + The merging part is O(n)
+        * Uses a *two-finger merge*
+- Quick Sort is O(n^2) at its worst case
+    + BUT, it tends to average O(nlog(n)) performance
+
+## Week 12 - Day 5
+
+**Hash Sets**:
+
+
 
 
