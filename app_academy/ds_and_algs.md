@@ -171,8 +171,25 @@ The best performance you can get with sorting is O(nlog(n))
 
 ## Week 12 - Day 5
 
-**Hash Sets**:
+**Hash Sets**: Collection of unique items, implemented as a hash
+- Stores data in buckets in an array, with mechanism for determining which bucket an item belongs in
+    + e.g. If you're storing ints, you could do `num % buckets.length` to determine the bucket the number goes in
+        * Is constant time to find the right bucket
+        * For objects, could do `object.hash % buckets.length`
+    + Ideally, you have one item per bucket
+        * Finding the bucket is fast, but then you have to linearly go through each item in the bucket to find one you want
+- When buckets start getting too full, the hash sets need to resize itself by doubling the number of buckets
+    + Have to move all items to new correct buckets
+    + Good time to resize is when number of items equals bucket array's length
+    + Resize is slow (O(n)), which is why you double # buckets each time
+        - Tends to break up large buckets
+        - Since you double, don't have to resize often, which *ammortizes* cost of resizing over life of the set
+        - Resize takes longer each time, but you get a longer time till the next resize each time
+- Worst Case: Everything is in the same bucket
+    + But on average, each bucket will have `num_items / num_buckets` items
+- Doing `include?` is, on average, O(1)
+    + Is constant time to find bucket, then linear to search bucket's array
+    + But on average, buckets will be small because you'll have `num_buckets - 1` or less items
+- In production, hash set will use a *hash algorithm* to further scramble the item and make the bucket it ends up in *more random*
 
-
-
-
+**Hash Function**:
