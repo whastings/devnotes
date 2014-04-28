@@ -192,4 +192,38 @@ The best performance you can get with sorting is O(nlog(n))
     + But on average, buckets will be small because you'll have `num_buckets - 1` or less items
 - In production, hash set will use a *hash algorithm* to further scramble the item and make the bucket it ends up in *more random*
 
-**Hash Function**:
+## Week 14 - Day 1
+
+**Hash Function**: Algorithm to produce a *hash* of an input with the goal of all elements being evenly distributed
+- Reduces the likeliness of **hash collisions** (two items in the same bucket)
+- For even distribution, needs to be *suitably random*, while still producing the same output consistently for a given input
+- Can combine hash's by `XOR`ing them
+    + e.g. `@name.hash ^ @age.hash`
+    + Can be useful when creating a custom hash method that combines all hashes of your object's instance variables
+    + Also good for producing hash of an array by combining hashes of all of its elements
+- Properties of good hash functions:
+    + Probability of any bit being 1 or 0 is 50%
+        * Means results will be evenly distributed
+- Can hash a string because its basically an array of character codes (numbers)
+- In Ruby:
+    + For an object to be a valid hash key, its class must:
+        * Override `==` in a way that defines *equality* for that class
+        * Override `hash` in a way that produces the same value for two instances that `==` each other
+            - Can return the hash of an array of all your relevant instance variables
+
+**Queue**: Abstract data type that's *first-in, first-out*
+- Linked Lists are good for these
+
+**Priority Queue**: Queue in which elements are removed based on their *importance*, not the order in which they were added
+- Keeps elements in order sorted by importance
+- e.g. A CPU giving priority to certain processes when time slicing
+
+**Heap**: A tree data structure
+- A heap must be *full*: All nodes must be *left-aligned* (fill up nodes to the left before moving to the right)
+- **Max Heap**: Heap in which a parent node's value is greater than or equal to those of its children
+    + Biggest element is always at the root
+    + **Peek**: Operation that looks at the largest element
+        * Is O(1)
+- **Heapify Op**: Operation that resorts the heap on insert to preserve the constraints of the max heap
+- *Insert* is proportional to depth of the tree
+    + Is O(depth), which is O(log(n))
