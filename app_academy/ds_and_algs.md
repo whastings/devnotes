@@ -15,7 +15,7 @@
     + Would have methods like keys, values, etc.
 
 In binary arithmetic, you carry the 1 to the next digit if you get to 2
-- You can convert 
+- You can convert
 
 **Computer Memory**:
 - Can visualize as a list of cells
@@ -75,7 +75,7 @@ More memory:
 
 ## Week 11 - Day 3
 
-**Dynamic Array** 
+**Dynamic Array**
 - Like static array, but can resize when it gets full
 - Resizing is slow
     + Have to copy everything to new, bigger memory location
@@ -137,7 +137,7 @@ More memory:
     + a.k.a. **O(2^n)**
     + e.g. Subsets
     + *Has terrible performance*
-        * If you increase problem size by one, it's twice as hard 
+        * If you increase problem size by one, it's twice as hard
 - **Factorial Time**
     + a.k.a. **O(n!)**
     + e.g. Permutations
@@ -260,4 +260,35 @@ The best performance you can get with sorting is O(nlog(n))
     + Tends to be slower than quick sort but faster than merge sort
         * Is more reliable than quick sort
 
-**LRU Cache**
+## Week 14 - Day 5
+
+**Linked List**
+* Structure in which each node points to the next node in the list
+  * A *Doubly-Linked List* has nodes pointing to previous node too
+* Can push and pop in O(1)
+* Can Insert and Delete in O(n)
+  * Insert and deleting are just a matter of reassigning links
+  * But indexing is slow
+
+**LRU Cache**: A data structure that memoizes a function and stores
+data based on *least-recently used* items
+* Good for function that gets the same input many times
+* Keeps track of when each item was last accessed
+* Places a limit on how much memory its data can take up
+  * Can remove an "old" item from memory to make room for a new one
+    * Will *eject* the least recently used item
+* To implement, you could store values in a hash for fast lookup
+  * But you also have to organize last-used data
+  * Can store actual data in a *linked list* and have hash keys point to nodes
+    in the linked list
+    * Have linked list maintain newest to oldest order
+    * When an item is accessed, move it to the front of the linked list
+      * Just a matter of pointing the node's `next` pointer attribute
+    * Can just eject last item in linked list and remove its hash entry
+
+**Binary Search Tree**
+**Self-Balancing Tree**
+**Graphs**
+**Database scalability, concurrency, sharding**
+**Threading, evented IO**
+**Proxy Server**
