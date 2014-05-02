@@ -192,7 +192,7 @@ The best performance you can get with sorting is O(nlog(n))
     + But on average, buckets will be small because you'll have `num_buckets - 1` or less items
 - In production, hash set will use a *hash algorithm* to further scramble the item and make the bucket it ends up in *more random*
 
-## Week 14 - Day 1
+## Week 14 - Day 1 - Day 3
 
 **Hash Function**: Algorithm to produce a *hash* of an input with the goal of all elements being evenly distributed
 - Reduces the likeliness of **hash collisions** (two items in the same bucket)
@@ -220,10 +220,44 @@ The best performance you can get with sorting is O(nlog(n))
 
 **Heap**: A tree data structure
 - A heap must be *full*: All nodes must be *left-aligned* (fill up nodes to the left before moving to the right)
+    + Holes can only appear on the right of the final row
+    + Because of this property, you can store elements of a heap in a dynamic array instead of in a tree node for better time and space efficiency
+        * You can find element's left child with `2 * index + 1` and it's right with `2 * index + 2`
+            - Providing each element only has two children max
 - **Max Heap**: Heap in which a parent node's value is greater than or equal to those of its children
     + Biggest element is always at the root
     + **Peek**: Operation that looks at the largest element
         * Is O(1)
+- **Min Heap**: Heap in which a parent node's value is less than those of its children
+    + Smallest element is always at the root
 - **Heapify Op**: Operation that resorts the heap on insert to preserve the constraints of the max heap
+    + When child is greater than parent, switches child and parent, repeating until greatest element is at root
 - *Insert* is proportional to depth of the tree
     + Is O(depth), which is O(log(n))
+- **Heap Sort**:
+    + Is an in place sort
+    + Starts with an unordered array, then orders elements into a heap going from left to right
+        * Does a heapify op each time it adds an element to the *heap end* of the array so elements will be in heap order at the end
+    + Is O(n(log(n)))
+
+**Sorting Algorithm Comparisons**:
+- Bubble
+    + Worst time: O(n^2)
+    + Extra memory: O(1)
+- Merge
+    + Worst time: O(n(log(n)))
+    + Extra memory: O(n)
+    + Better than quick sort when consistent performance required
+- Quick
+    + Worst time: O(n^2)
+    + Average time: O(n(log(n)))
+    + Extra memory: O(log(n))
+    + Better memory usage than merge sort
+    + Faster than merge sort on average
+- Heap
+    + Worst time: O(n(log(n)))
+    + Extra memory: O(1)
+    + Tends to be slower than quick sort but faster than merge sort
+        * Is more reliable than quick sort
+
+**LRU Cache**
