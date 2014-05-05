@@ -286,9 +286,30 @@ data based on *least-recently used* items
       * Just a matter of pointing the node's `next` pointer attribute
     * Can just eject last item in linked list and remove its hash entry
 
-**Binary Search Tree**
-**Self-Balancing Tree**
-**Graphs**
-**Database scalability, concurrency, sharding**
-**Threading, evented IO**
-**Proxy Server**
+## Week 15 - Day 1
+
+**Binary Search Tree**:
+* Each node has up to two children
+  * Has child with lower value as "left" child
+    * So all nodes in the left-hand subtree have values less than the node's
+  * Has child with higher value as "right" child
+    * So all nodes in the right-hand subtree have values greater than the node's
+  * Tree is **balanced** when this order is maintained and number of descendent
+  nodes from each child's subtree is about equal
+    * A **self-balancing** tree is one that takes care of maintaining order
+* Lookup is O(depth)
+  * When balanced, depth is log(n)
+* Insert is O(depth)
+  * Requires traversing down tree to find insertion point, then traversing
+  back up to rebalance tree as needed
+* Need to periodically rearrange nodes to maintain balance
+  * Can rotate nodes left or right
+* **Balance Factor** = depth_left_subtree - depth_right_subtree
+  * Best to keep its *absolute value* less than 2
+* **Depth** = depth_left_child + depth_right_child
+  * A leaf node's depth is 1
+  * A node with two leaf children has depth of 2
+* Typically requires all values be unique (a Set)
+* Could use as storage for a hash map by having nodes ordered by key but
+also storing the values for their keys
+* Also good at finding elements within a range of values
