@@ -313,3 +313,31 @@ data based on *least-recently used* items
 * Could use as storage for a hash map by having nodes ordered by key but
 also storing the values for their keys
 * Also good at finding elements within a range of values
+
+## Week 15 - Day 3
+
+**B-Tree**: A tree data structure like a binary tree, but allows more than
+two children per node
+* Commonly used in databases and file systems
+* Each node stores its childrens' locations on disk
+* Each node contains multiple values
+  * Each value points to a child node whose values are <= the value
+  * So the node's values segment its childrens' values
+  * e.g. If a node's values are `[5, 10, 15]`, its children would be:
+    * One with values less than 5
+    * One with values greater than 5 and less than 10
+    * One with values greather than 10 and less than 15
+    * One with values greater than 15
+
+**Graphs**: Abstract data type consisting of nodes linked by edges
+* Nodes don't have parent/child relationships
+* e.g. Cities linked by train lines
+* **Vertices**: The nodes in a graph
+  * Singular is *vertex*
+* **Edges**: Links between vertices
+  * You can form a path by following edges
+  * Each edge may be given a *weight* based on the cost of taking it
+    * One edge might be much longer than another
+  * If you have an edge going both directions, you can represent it with
+  two edges, an *in-edge* and an *out-edge*
+* A tree is a *type of graph*
