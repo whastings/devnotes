@@ -341,3 +341,21 @@ two children per node
   * If you have an edge going both directions, you can represent it with
   two edges, an *in-edge* and an *out-edge*
 * A tree is a *type of graph*
+* **Fully-Connected Graph**: One in which each vertex is connected to every other
+
+## Week 15 - Day 5
+
+**Dijkstra's Algorithm**: Finds the shortest path between two vertices in a graph
+* Starts out by finding all adjacent vertices (one step away),
+ignoring costs/weights of edges
+* Next, finds all vertices that are two steps away
+* Repeats to find new, farther away vertices
+  * But ignores vertices it's already visited if a new vertex happens to lead backwards
+* Then, start trying adjacent edges starting with lowest weight/cost
+* Then, build paths out, taking first the paths where the
+entire path costs are cheapest
+* Implementation:
+  * Might have a `Vertex` class with an edges array
+  * An `Edge` class with `vertex1`, `vertex2`, and `cost`
+  * A `Graph` class with vertices and edges
+  * Write method that takes the starting vertex and other vertices
