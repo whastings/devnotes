@@ -359,3 +359,63 @@ entire path costs are cheapest
   * An `Edge` class with `vertex1`, `vertex2`, and `cost`
   * A `Graph` class with vertices and edges
   * Write method that takes the starting vertex and other vertices
+
+## Week 16 - Day 3
+
+**Rails Servers**:
+* WEBRick: Single-threaded, not production ready.
+* Thin: Single-threaded, but takes advantage of evented IO
+  * Never runs more than one thread of Rails app
+  * But can start handling new request while finishing responding to last one
+* Unicorn: Is a multi-process server
+  * Can start up new process when one process is blocked for DB/other IO
+* Puma: Multi-threaded server
+
+**Multithreading**:
+* Can make a new thread in Ruby with **Thread.new**
+  * Pass it a block for the code it should run
+  * Make sure master thread that spawns other threads doesn't terminate early
+    and kill them off
+    * Can do so by calling `Thread#join` on each thread
+* Thread vs Process
+  * Both can be scheduled by the OS
+  * Processes *do not* share memory space
+    * But they can send messages through sockets
+    * Usually involves more memory than threads
+      * Each process gets own copy of Ruby runtime
+  * Threads *do* share memory space
+  * Threads are faster to switch between than processes
+  * Threads have to worry more about unsynchronized access to shared state
+    * e.g. Global variables
+* **Virtual Memory**: Memory with addresses that are different from the
+  physical memory addresses in RAM
+  * **Memory Management Unit**: CPU component configured by kernel to dole out
+    virtual memory addresses
+    * Has a **Page Table** that maps virtual memory addresses to physical ones
+    * Gives programs virtual memory addresses so they can't know the real ones
+  * Languages like C used give you physical memory addresses
+    * Was easy for programs to conflict over the same area of memory
+* **Mutex**: Means "mutual exclusion"
+  * Is Ruby's construct for protecting concurrent access to shared state
+  * Can lock it with `Mutex#lock`
+    * Only the thread that locked it can use it until it unlocks it
+    * Any other thread that tries to use it while it's locked will have to block
+  * Often written into the Kernel so it can know when a thread is blocked and
+    do better time slicing
+
+**Databases**:
+* Consist of a server that handles transactions, possibly from
+  multiple clients
+* A lot of times in deployment, you'll have multiple app instances that
+  utilize one data server
+  * So concurrency and coordination of data is handled by DB
+  * You might also have two DB servers, a **master server** and a **slave server**
+  * DB server should have lots of memory to fit as much of dataset in RAM
+    as possible
+* **Scaling Up**: Increasing memory, power, etc. of one server
+* **Scaling Out**: Increasing number of servers
+
+## Week 16 - Day 5
+ACID
+Database locking
+MVCC
