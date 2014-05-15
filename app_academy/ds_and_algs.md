@@ -416,6 +416,31 @@ entire path costs are cheapest
 * **Scaling Out**: Increasing number of servers
 
 ## Week 16 - Day 5
-ACID
-Database locking
+
+**ACID**: Optimal set of characteristics for databases
+* Atomicity: Every query should be in a transaction and should be atomic
+  * If you don't use a transaction, each query is in its own
+* Consistency: DB should always check any constraints when committing a
+  transaction and rollback the query if it doesn't pass a constraint
+  * DB constraints are important when you have more than one application server
+    accessing the same DB
+    * e.g. Two app servers trying to create users with same email
+* Isolation: Transactions should be processed in a serializable way
+  * When running two transaction concurrently, neither should be able to
+    interfere with the other
+    * Should run as if they were executed one after the other
+      * Can't really do this, as it would be too slow
+  * To protect against isolation failures, you have to limit concurrency
+  * Problems:
+    * Uncommitted Read: When read of data happens before query modifying
+      that data is committed
+  * **Database Locking**:
+    * Way to limit concurrent access to data to prevent isolation failures
+    * One query can acquire a lock on a particular row in a table
+      * Other queries to read or change that row have to wait until
+        first query unlocks it
+* Durability: DB only reports success when query actually succeeds (writes
+  to hard drive)
+  * Program has to wait until DB reports success
+
 MVCC
