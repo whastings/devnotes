@@ -415,7 +415,7 @@ entire path costs are cheapest
 * **Scaling Up**: Increasing memory, power, etc. of one server
 * **Scaling Out**: Increasing number of servers
 
-## Week 16 - Day 5
+## Week 16 - Day 5 to Week 17 - Day 1
 
 **ACID**: Optimal set of characteristics for databases
 * Atomicity: Every query should be in a transaction and should be atomic
@@ -434,13 +434,49 @@ entire path costs are cheapest
   * Problems:
     * Uncommitted Read: When read of data happens before query modifying
       that data is committed
+      * Solved by write lock blocking read lock
+    * Non-repeatable Read: When write happens between two reads of a single row,
+      preventing them from returning identical results
+      * Solved by read lock blocking write lock
+    * Phantom Read: When write happens between two reads of a result set,
+      preventing them from returning identical results
+      * Solved by a range lock
   * **Database Locking**:
     * Way to limit concurrent access to data to prevent isolation failures
     * One query can acquire a lock on a particular row in a table
       * Other queries to read or change that row have to wait until
         first query unlocks it
+    * Types of locks:
+      * Write Locks
+      * Read Locks
+        * Read locks don't block other reads
+      * Range Lock: Locks all rows that match a given condition
 * Durability: DB only reports success when query actually succeeds (writes
   to hard drive)
   * Program has to wait until DB reports success
 
-MVCC
+**Database Scaling:**
+* Start by increasing specs of single DB server (scale up)
+* **Master/Slave Architecture**:
+  * Have all UPDATE queries go to the Master
+    * Master will push the UPDATE to the slaves in the right order
+      * Master may hold off telling client that update was successful until
+        it finishes pushing it to slaves
+        * Keeps client from trying to read modified record before it's
+          updated on the read slaves
+    * Master handles 100% of writes, but no reads
+  * Have read queries go the the slaves
+    * The read work is broken up between the slaves
+  * Is best when your read low is heavy and your write load is light
+  * Each box stores a copy of the whole DB
+  * Works until you have so much data it can't fit into RAM/HDD on one box
+* **Sharding**: Breaking up data in database across multiple servers
+  * Can store some tables in one server and others in another
+  * Can break up one table across boxes as long as each box stores a defined
+    range of data for that table
+    * e.g. users starting with A - L on box 1 and M - Z on box 3
+    * Challenge: Transaction that affects data on more than one box can
+      no longer be atomic
+      * Have to do one transaction per box
+      * Best to split data across boxes in which items in the data don't
+        interact with each other
