@@ -87,6 +87,7 @@
     * **Regenerator**: A transpiler by Facebook that compiles generator
       code to ES5 compatible code
   * ES7 will likely have built in async functions
+* Slides: https://speakerdeck.com/getify/syncing-async
 
 
 ## Polymer, the Gateway Drug to Designer-Developer Happiness - Rob Dodson
@@ -122,3 +123,141 @@
   * Includes declarative event bindings for custom elements
     * e.g. `on-tap="..."`
 * Slides: robdodson.me/polymer-html5devconf
+
+
+## End to End JavaScript - Dan Lynch
+
+* Working in all JS limits the context switching you need to do
+* There is an NPM require style for AMD JS modules
+* Architecture pattern: Divide code into core, sandbox, extensions, modules
+  * Sandbox links modules together so they don't have to require each other
+    * Also, proxies between core and modules
+* **Aura**: Architecture library by Addy Osmani
+* Can use **jsdom** Node module to provide document, window, and navigator vars
+  * Allows you to run in Node frontend code that refers to these variables
+* Can define a model's schema in one place to use on both backend and frontend
+  **Inflection.js** can help with this
+* Can be better to use data attributes for JS selection of elements
+  * Keeps style and JS better separated than using classes
+* Function's have a `length` property to indicate their arity (how many
+  arguments they take).
+
+
+## WebSocket Perspectives Past, Present, & Future - Frank Greco, Kaazing
+
+* HTTP isn't optimal for event-based systems or real-time ones
+  * Can be emulated (e.g. comet), but it's resource intensive and wasteful
+* Websockets came around in late 2000s
+  * Enables full-duplex communication over one channel
+  * Made of two standards from W3C: Protocol and API
+    * Protocol indicated by `ws://` (`wss://` for SSL-secured)
+  * Can handle text and binary data
+* Websockets now supported by all modern web browsers
+* Can run application protocols over websockets (e.g. XMPP, VNC)
+* Can connect web clients to other protocols via websockets
+* Websockets and HTTP are the web's two major protocols
+* On mobile, the persistent connection can be better for the battery,
+  as it stays at the same energy level for longer
+* Good for linking up web apps with different kinds of hardware
+  * e.g. Arduino, phones, exercise monitor, heart rate monitor
+
+
+## The Mobile Viewports - Peter-Paul Koch (@ppk)
+
+* Slides: quirksmode.org/presentations/Spring2014/viewports_sf2.pdf
+* There are more mobile browsers than desktop browsers
+  * Especially, on Android
+* Mobile has touch events, which are not exactly the same as mouse events
+* CSS Pixel: What we use when we give a css property a px value
+  * Is an abstraction on top of the real device pixels
+  * Their size increases and decreases as the user zooms in and out
+  * It used to be one CSS pixel per device pixel
+    * Now with retina displays, you might have one CSS pixel per *four*
+      device pixels
+  * Everything in JS and CSS uses CSS pixels, except for `screen.width`
+    and `screen.height`
+* The `<html>` element's width is calculated relative to the viewport's width
+  * On desktop, it equals the browser window's width
+  * On mobile, the size of the viewport *changes* as zoom changes
+* Layout viewport: Default mobile viewport with size between 768 and
+  1024px
+  * May be much wider than device's actual screen, which is why you have to
+    scroll horizontally on non-mobile optimized sites
+  * Responsive design involves overriding this
+  * Can read its dimensions in JS in most browsers with:
+    * `document.documentElement.clientWidth`
+    * `document.documentElement.clientHeight`
+* Visual viewport: The actual viewport of the device (its screen)
+  * Can read its dimensions in JS in most browsers with:
+    * `window.innerWidth`
+    * `window.innerHeight`
+* Ideal viewport: The ideal size of the layout viewport for a *specific device*
+  * So is different for every kind of device
+  * May or may not be same dimensions as physical screen size
+    * e.g. Is 320px wide on iPhones, both retina and older
+      * Even though retina is 640 device pixels wide
+  * On Android, the most common widths are: 320, 360, 400
+  * Sadly, no cross browser way to read its dimensions with JS
+    * Some report ideal viewport size, others report physical screen size
+* `<meta name="viewport" content="width=device-width">`
+  * This sets the size of the layout viewport to the size of the ideal viewport
+  * Gives us the power to do responsive design
+  * Safari Bug: It uses the ideal portrait width even
+    when device is in landscape
+* `<meta name="viewport" content="initial-scale=1">`
+  * This does the same thing
+  * Sets the initial zoom to 100% of the ideal viewport
+  * This fixes the Safari bug, but then IE10 has opposite problem
+* Ideal solution: Combine *both* meta tags for best results
+  * `<meta name="viewport" content="width=device-width, initial-scale=1">`
+* Media Queries
+  * Always use `min-width` and `max-width`, not `min-device-width`
+    and `max-device-width`
+  * Never just use `width`, as exact widths just don't work
+* Watch out if using physical units (mm, cm) in CSS
+  * Browsers define 1 inch as 96 CSS pixels
+  * So there's no guarantee to correspondence with the real world
+* Paul is writing *The Mobile Web Handbook*
+
+
+## Stop Making Excuses and Start Testing Your JavaScript! - Ryan Anklam, Netflix
+
+* Popular Node frameworks: Mocha, Jasmine, Jest, Tape
+* Popular browser frameworks: Jasmine, Mocha, Jest, QUnit
+* Testing dialects
+  * expect (e.g. `expect(1 + 1).to.equal(2)`)
+  * should (e.g. `(1 + 1).should.equal(2)`)
+  * assert (e.g. `assert.equal((1 + 1), 2)`)
+* Can use **Chai.js** to get all three dialects
+* To test in browser, need a spec runner HTML file
+* Jasmine and **Sinon.js** have good spies/stubs/mocks for functions and methods
+  * Spies can tell if function was called and with what arguments
+  * Can have mock return specific data
+* Testing promises can be difficult
+  * Can use the **chai-as-promised** plugin
+    * e.g. `expect(promiseFunc()).to.eventually.equal(value);`
+* Testing the DOM can be difficult
+  * But you can spy on DOM element functions to see how your code
+    manipulates it
+  * Can also create HTML fixture files to test against
+    * **jasmine-jquery** plugin helps with this (`loadFixtures` function)
+* Testing async code can be difficult:
+  * Mocha will pass a `done` callback to your `it` function that you call
+    when your async test has completed
+* Testable JavaScript:
+  * Doesn't use hard-coded DOM selectors
+  * Gives names to function expressions for better stack traces
+  * Can be instantiated (e.g. Constructor function)
+    * So you can recreate it between tests to reset state
+  * Breaks up procedures into reusable functions/methods
+  * Gives names to event handling functions
+  * Isn't locked up in a callback (e.g. `$(document).ready`)
+  * Doesn't use the Singleton pattern
+* Automating Testing
+  * Testing is easier when running them is easy
+  * Can specify scripts to run in package.json
+  * Integrate it with a build tool like grunt
+  * **testem** is a runner to help you run your tests
+    * Can open things you need (e.g. Phantom JS) and run your framework
+    * Can open tests in multiple browsers
+    * **karma** is an alternative used by Angular
