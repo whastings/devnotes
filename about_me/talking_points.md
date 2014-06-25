@@ -42,5 +42,9 @@
   * Front-end frameworks
 * Sophisticated front-end interfaces
   * Canvas, CSS3 animation
+* Front-end Ops:
+  * Dev tools
+  * Build tools
+  * Front-end testing
 * Current technologies: Node.js and Angular.js
   * Node is getting Big
