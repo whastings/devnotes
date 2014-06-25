@@ -17,9 +17,30 @@
   * Co-led development of Mac dev tool for developing Drupal sites locally
     * Built front-end GUI with Node.js, Bootstrap, and Knockout.js
   * Had opportunity to write a lot more JS (Knockout, Node)
+  * Learned about servers, SQL/databases, and Git
 * Decided to transition out of PHP world & take programming to next level
+  * Wanted to move to Ruby & Rails
+  * Wanted to learn more front-end JS
   * Took App Academy course (bootcamp, Ruby, Rails, JS, & Backbone)
   * Asked to stay on as TA for 6 months after excelling in the course
 
 
 ## Interests
+
+* Performance
+  * Front end (e.g. asset minification and concatenation)
+  * Back end (e.g. optimized queries, gzip)
+* Security
+  * Protecting against vulnerabilities (SQL injection, CSS, CSRF)
+  * Weird ways security breaches occur
+* JavaScript
+  * Prototypal inheritance
+  * Language nuances
+  * Closures
+  * Manipulating the DOM
+* Single-page apps
+  * Front-end frameworks
+* Sophisticated front-end interfaces
+  * Canvas, CSS3 animation
+* Current technologies: Node.js and Angular.js
+  * Node is getting Big
