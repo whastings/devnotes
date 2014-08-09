@@ -81,7 +81,7 @@
     * `opposite = shipY - zombieY`
     * `adjacent = shipX - zombieX`
     * `currentDirection = Math.atan2(opposite, adjacent)`
-      * Returns counterclockwise angle in radians
+      * Returns counterclockwise angle in radians (arctangent)
   * `currentFps`
     * `fps = 1000 / (currentTime - previousTime)`
       * `currentTime - previousTime` is time since last frame
@@ -107,4 +107,46 @@
   * `#allocate`, `#create`, and `#free`
   * Object freed when going off screen or destroyed
 
-## Protomatter.js
+## ChatHappy
+
+* Custom `ngTemplates` middleware
+  * Read in templates and attach them to `req`
+  * Reread on each request in dev, cache in prod
+* Keep online with Forever
+* Backend architecture
+  * `ChatManager`
+    * Creates rooms
+    * Creates user on connection
+    * Add users to rooms
+  * `ChatRoom`
+    * Broadcasts to sockets in a particular "room"
+      * Sends messages, users entering and leaving
+    * Publishes `new_room` event on initialize
+  * `User`
+    * One instance per socket connection
+    * Keeps track of rooms user is in
+    * Communicates with frontend over sockets
+      * Sends room list and username
+    * Alerts rooms when name is changed
+* Frontend UI
+  * ChatCtrl
+    * `<chat-window>`
+      * `<chat-tabs>`
+      * `<chat-room>`
+        * Auto scrolls as new messages come in
+    * `<user-list>`
+    * `<user-settings>`
+      * Binds to `user` attributes and calls `user.save()`
+    * `<room-list>`
+* `ChatController` listens to socket and passes changes to chat rooms and user
+* Other Directives:
+  * `full-height`: Sets element height to window height
+  * `parent-height`: Sets element height to height of parent
+  * `remaining-height`: Sets element height to unfilled height of parent
+* Services:
+  * `ChatRoom`: Returns prototype for creating instances to represent chat rooms
+  * `socket`: Wraps socket.io interface
+    * Calls `scope.$apply` from listening controller when event detected
+  * `user`: Returns singleton object holding user data
+    * Emits events to server via socket
+    * Stores chat rooms
