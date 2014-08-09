@@ -58,5 +58,53 @@
 
 ## Zasteroids
 
+* Use Grunt for build
+  * Concat, minify, and version scripts
+* Everything in `<canvas>`
+* Object Model:
+  * MovingObject
+  * Asteroid < MovingObject
+  * Bullet < MovingObject
+  * Ship < MovingObject
+  * Game
+* Drawing Zombie
+  * Save canvas context
+  * Translate canvas to x and y position
+  * Rotate canvas to `Math.PI * 1.5 + currentDirection`
+  * Draw image
+  * Restore canvas context
+* Set random Asteroid position and velocity
+  * Randomly multiply by 1 or -1
+* Position and velocity both represented by `[x, y]` arrays
+* Math
+  * `Asteroid#updateDirection`: Rotate zombie to face ship
+    * `opposite = shipY - zombieY`
+    * `adjacent = shipX - zombieX`
+    * `currentDirection = Math.atan2(opposite, adjacent)`
+      * Returns counterclockwise angle in radians
+  * `currentFps`
+    * `fps = 1000 / (currentTime - previousTime)`
+      * `currentTime - previousTime` is time since last frame
+    * Pass to `#move` of asteroids, bullets, and ship
+      * `MovingObject#move` divides velocityX and velocityY by currentFps
+      * Implements **Time-Based Animation**
+  * `newPositionX = positionX + velocityX`
+  * `newPositionY = positionY + velocityY`
+  * `MovingObject#findDistance`: Uses distance formula
+    * `Math.sqrt(Math.pow((y2 - y1), 2) + Math.pow((x2 - x1), 2));`
+  * `MovingObject#isCollidedWith`:
+    * Checks if distance between is less than combination of radii
+  * `Ship#draw`
+    * Use context to save, translate, rotate, draw, and restore
+    * `angle = currentDirection * (Math.PI / 180) + (Math.PI * 0.5)`
+      * currentDirection is in degrees
+      * Multiplying by `Math.PI / 180` converts to radians
+  * `Ship#updateVelocity`
+    * `velocityX = Math.cos(degrees * (Math.PI / 180)) * speed`
+    * `velocityY = Math.sin(degrees * (Math.PI / 180)) * speed`
+    * `degrees` is current direction
+* Object pools: `AsteroidPool` and `BulletPool`
+  * `#allocate`, `#create`, and `#free`
+  * Object freed when going off screen or destroyed
 
 ## Protomatter.js
