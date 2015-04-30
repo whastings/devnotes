@@ -29,6 +29,8 @@
 * `gv` to select last selected area
 * `g;` moves to previous change
 * `g,` moves to next change
+* `ctrl + o n` executes normal mode command *n* from insert mode (good for macros)
+* `ctrl + v` enters **Visual Block Mode**.
 
 ## Macros
 * Creating a macro:
