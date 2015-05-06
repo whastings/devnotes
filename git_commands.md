@@ -186,6 +186,8 @@
   * Revert to a previous commit
 * `git revert master@{"relative_time_or_date"}`
   * Revert to a previous commit at a relative time or date
+* `git rev-list --all | xargs git grep regex`
+  * Search commit history for changes matching a regex
 * `git rm --cached file`
   * Removes a file from the repo but not the local filesystem
 * `git rm file`
