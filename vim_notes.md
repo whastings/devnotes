@@ -121,3 +121,4 @@
 * `:cq` force-quits Vim w/ a non-zero status (good for aborting
   process that started Vim).
 * `:argdo command` executes command on every open buffer. 
+* `:retab` replaces tabs in a file w/ your configured indentation.
