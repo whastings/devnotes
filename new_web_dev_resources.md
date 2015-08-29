@@ -18,6 +18,7 @@ for beginners.
 * [HTML & CSS on Kirupa.com][kirupa_html_css]
 * [CSS Diner][css_diner]
 * [Learn CSS Layout][learn_layout]
+* [Understanding CSS: Selector Specificity][selector_specificity]
 
 [cs_html_css]: https://www.codeschool.com/paths/html-css
 [html_dog_html]: http://htmldog.com/guides/html/
@@ -26,6 +27,7 @@ for beginners.
 [kirupa_html_css]: http://www.kirupa.com/html5/learn_html_css.htm
 [css_diner]: http://flukeout.github.io/
 [learn_layout]: http://learnlayout.com/
+[selector_specificity]: https://medium.com/@dte/understanding-css-selector-specificity-a02238a02a59
 
 ## JavaScript
 
