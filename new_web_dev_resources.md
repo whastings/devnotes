@@ -49,9 +49,11 @@ for beginners.
 
 * [A Command Line Primer for Beginners][cli_primer]
 * [:book: The Command Line Crash Course][cli_crash_course]
+* [Learn the Command Line - Codecademy][learn_cli]
 
 [cli_primer]: http://lifehacker.com/5633909/who-needs-a-mouse-learn-to-use-the-command-line-for-almost-anything
 [cli_crash_course]: http://cli.learncodethehardway.org/book/
+[learn_cli]: https://www.codecademy.com/courses/learn-the-command-line
 
 ## Git
 
