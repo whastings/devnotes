@@ -31,6 +31,7 @@
 * `g,` moves to next change
 * `ctrl + o n` executes normal mode command *n* from insert mode (good for macros)
 * `ctrl + v` enters **Visual Block Mode**.
+* `=` auto indents visually selected lines
 
 ## Macros
 * Creating a macro:
@@ -89,6 +90,7 @@
 * `ctrl + i` goes to next jump location
 * `ctrl + o` goes to previous jump location
 * `ctrl + ]` jumps to definition via ctags
+* `zz` to center current line in middle of screen
 
 ## Cut, copy, & paste
 * `v` starts selecting characters
@@ -122,3 +124,10 @@
   process that started Vim).
 * `:argdo command` executes command on every open buffer. 
 * `:retab` replaces tabs in a file w/ your configured indentation.
+
+## Plugins
+
+### AndrewRadev/splitjoin.vim
+
+* gS to split a one-liner into multiple lines
+* gJ (with the cursor on the first line of a block) to join a block into a single-line statement.
