@@ -30,3 +30,7 @@
 ## Podcasts
 
 * [JavaScript Jabber](https://devchat.tv/js-jabber)
+
+## Courses
+
+* [Egghead](https://egghead.io/)
