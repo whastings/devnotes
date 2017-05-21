@@ -32,6 +32,7 @@
 * `ctrl + o n` executes normal mode command *n* from insert mode (good for macros)
 * `ctrl + v` enters **Visual Block Mode**.
 * `=` auto indents visually selected lines
+* `J` will combine the next line with the current line
 
 ## Macros
 * Creating a macro:
