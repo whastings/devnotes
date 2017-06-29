@@ -52,3 +52,13 @@
   * Anything an object needs from environment should be passed in (to constructor or methods)
   * Object is simpler because it doesn't have to define relationships
   * Relationships are made explicit
+  
+## Ch. 7: Achieving Object-Oriented Design
+
+* We write tests first so we can:
+  * Know what we want to achieve
+  * Know what dependencies of object will be
+    * A unit test is just another context for an object
+* Object communication patterns are more important than class structure
+* Create **Value Types** that are immutable objects that model value concepts in your domain
+  * Are closer to primitive types than regular OO objects
