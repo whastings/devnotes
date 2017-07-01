@@ -52,7 +52,7 @@
   * Anything an object needs from environment should be passed in (to constructor or methods)
   * Object is simpler because it doesn't have to define relationships
   * Relationships are made explicit
-  
+
 ## Ch. 7: Achieving Object-Oriented Design
 
 * We write tests first so we can:
@@ -62,3 +62,36 @@
 * Object communication patterns are more important than class structure
 * Create **Value Types** that are immutable objects that model value concepts in your domain
   * Are closer to primitive types than regular OO objects
+  * Values don't have changing state and so don't have any meaningful identity
+  * Don't have to have much behavior
+  * e.g. Create an `ItemType` value type instead of just using a string
+* When a group of values are always used together, consider creating a new type to bundle them up
+* Methods for discovering new objects in your design:
+  * Breaking Out: Pull cohesive bits of functionality out of a complex class into smaller
+    collaborating objects
+    * Then can test smaller objects independently
+  * Budding Off: Create a new object to act as a service for an existing object when you find the
+    existing object needs some functionality that doesn't belong inside of it
+    * Use interface to abstract the role the new object plays for the old object
+    * Discover new types by "pulling them into existence"
+    * Process can repeat in finding services the new object needs
+    * "We think of this as “on-demand” design: we “pull” interfaces and their implementations into
+      existence from the needs of the client, rather than “pushing” out the features that we think a
+      class should provide."
+  * Bundling Up
+    * When a cluster of objects work together, you can bundle them all up into a containing object
+    * Containing object can hide and abstract the contained objects
+* Use interfaces to describe the roles objects can play
+  * Prefer having many narrow interfaces over few large interfaces
+    * Keeps each role well-defined
+* "We aspire to raise ourselves from programming in terms of control flow and data manipulation, to
+  composing programs from smaller programs—where objects form the smallest unit of behavior."
+
+## Ch. 8: Building on Third-Party Code
+
+* Prefer to avoid mocking third-party code
+  * If you mock, you might not get the behavior of the third-party code exactly right
+  * Sometimes you have to mock hard-to-trigger behavior
+* Write adapter objects to translate between your application domain and third-party code
+  * Adapter objects can present exactly the services that application objects need
+  * Helps keep low-level technical details out of the application code
