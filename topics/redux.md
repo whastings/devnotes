@@ -4,6 +4,12 @@
 
 * Is your single source of truth
 * Can be a hierarchy of nested objects and arrays
+* Types of data in state:
+  * Domain data: i.e. models, e.g. todos
+  * App state: e.g. is loading data
+  * UI state: e.g. modal is open
+* Don't try to make state shape match UI structure
+  * Instead, design shape around domain data and app state
 * Benefits
   * Easy to serialize state
     * e.g. Can send whole state along with bug report when error occurs
@@ -14,6 +20,11 @@
 ## Read-only state
 
 * Code can't arbitrarily mutate state wherever and whenever it wants
+
+## Unidirectional Data Flow
+
+* All data updates follow same lifecycle
+* Makes state change deterministic and understandable
 
 ##  Actions
 
@@ -35,17 +46,24 @@
 
 * Can simply create action objects from input, or can do more complex (e.g. async) things by
   returning things that middleware can process
+* Can do extra related work like checking current state to see if desired data is already loaded
 
 ## Reducers
 
 * Transform state via pure functions
+  * Should be pure: Don't want side effects running when actions are replayed
 * Never modify state, only return new state
 * Should return default state if previous state is undefined
+  * Root reducer invoked with undefined on app start
+* Only root reducer must have `(state, action) -> newState` signature
+  * Can pass more or different args to sub-accounts if useful
+* Slice: One part of a piece of state
 
 ### Reducer Composition
 
 * Reducer can be composed of functions using any scheme for composing pure functions
 * Break up reducers so each one can manage just one part of the state tree
+* Each nested reducer can define its own initial state
 
 ### Higher-order Reducers
 
@@ -57,6 +75,7 @@
 * Functions for accessing data from the store's state
 * They abstract shape of the store's state so consuming code isn't coupled to state's shape
 * reselect: Library for creating memoized selectors
+  * Can use one memoized selector as input to another
 * Can be co-located with Reducers as named exports ([link][colocate-selectors])
 
 ## Middleware
@@ -69,12 +88,22 @@
 * Store data for domain models in state like you would in a database
   * Each entity lives in one place where it can be looked up by ID
   * If entity is referred to anywhere else, it's referenced by ID
+* Benefits
+  * Helps keep UI state separate from model data
+  * Prevents data duplication
+  * Makes update logic simpler since less nesting
+  * Less re-renders since less objects are recreated on update
+  * Works well with nested container components
+    * Parent can just pass ID to container and it can look up object
 
 ##  Connected/Container Components
 
+* Provide data and behavior to presentational components
+* Have none or little markup just structure and no styles
 * Doesn't always have to be just the one component at the top of the tree
   * Can also be components lower down in the tree (e.g. the component for each item in a list)
   * Otherwise, you end up having to pass too much data through the tree to components that need it
+    * Watch out for components that take props just to pass them down
   * Can improve performance since react-redux connected components skip unneeded renders
 
 ## Time-travel Debugging
