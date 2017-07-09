@@ -8,6 +8,7 @@
   * Domain data: i.e. models, e.g. todos
   * App state: e.g. is loading data
   * UI state: e.g. modal is open
+    * Note: It's fine to keep UI state local to a component if it isn't used outside it and wouldn't be that valuable for time traveling
 * Don't try to make state shape match UI structure
   * Instead, design shape around domain data and app state
 * Benefits
@@ -47,6 +48,7 @@
 * Can simply create action objects from input, or can do more complex (e.g. async) things by
   returning things that middleware can process
 * Can do extra related work like checking current state to see if desired data is already loaded
+* Action creators can dispatch multiple actions in a row, but this can cause lots of re-rendering
 
 ## Reducers
 
@@ -105,6 +107,12 @@
   * Otherwise, you end up having to pass too much data through the tree to components that need it
     * Watch out for components that take props just to pass them down
   * Can improve performance since react-redux connected components skip unneeded renders
+* React-Redux connected components prevent unneeded re-renders by doing shallow equality checks on props from `mapStateToProps`
+  * Doesn't even inkove `mapStateToProps` if state object is the same
+  * Be sure to return same object references as props whenever possible
+  * If you need to do filtering, sorting, or other deriving of data, use reselect to memoize the work
+* Will be asked to re-render after each action dispatch
+  * Can use middleware to batch action processing
 
 ## Time-travel Debugging
 
@@ -114,6 +122,8 @@
 
 * With it, you can cheaply figure out if you need to re-render something
   * Just check if `newData !== previousData`
+* When updating state tree, only things affected by a change need to be copied
+  * Only the thing that changed or things containing the thing that changed
 
 ## Testing
 
