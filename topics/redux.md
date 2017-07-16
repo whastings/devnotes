@@ -120,6 +120,15 @@
   * e.g. Can create reusable function for implementing common operations
 * Break up reducers so each one can manage just one part of the state tree
 * Each nested reducer can define its own initial state
+* Organization
+  * Organizing UI state by page or section of page helps scale
+  * When data needs to be shared between views, break it out into own view-agnostic reducer
+* Reusability
+  * Find common reducer logic that can be reused
+  * e.g. Paginated lists
+  * Need to make sure multiple uses of same reducer don't run when action is only meant for one
+    * Can use a higher-order reducer to create a reducer that requires an action prefix
+    * See: https://techblog.appnexus.com/five-tips-for-working-with-redux-in-large-applications-89452af4fdcb#fe11
 
 ### Higher-order Reducers
 
@@ -158,7 +167,10 @@
   * If entity is referred to anywhere else, it's referenced by ID
 * If entity order needs to be stored, store an array of entity IDs, leaving entity objects in a
   by-ID map
+* Entity data is not mixed with UI data
+  * e.g. If UI allows selecting entity, don't add `isSelected` flag to entity object
 * redux-orm: A library that provides a nice OO facade over working with normalized data
+* Only duplicate entity data when you're editing it and want to be able to roll back to previous state
 * Benefits
   * Helps keep UI state separate from model data
   * Prevents data duplication
