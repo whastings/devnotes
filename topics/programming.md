@@ -21,4 +21,9 @@
   * The more abstractions you add, the more new folks have to learn to contribute
   * Rethink and purge unneeded things from code whenever necessary
 
+## Beware Dogma
+
+* "A dogma is born when the solutions are presented without enough original context, and newcomers feel pressured to delegate crucial decisions to an authority." -Dan Abramov, [The Case for Flux][case-for-flux]
+
+[case-for-flux]: https://medium.com/swlh/the-case-for-flux-379b7d1982c6
 [min-api-surface]: https://2014.jsconf.eu/speakers/sebastian-markbage-minimal-api-surface-area-learning-patterns-instead-of-frameworks.html
