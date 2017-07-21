@@ -95,3 +95,21 @@
 * Write adapter objects to translate between your application domain and third-party code
   * Adapter objects can present exactly the services that application objects need
   * Helps keep low-level technical details out of the application code
+
+## Chapter 9: Commissioning an Auction Sniper
+
+* Learn to slice up functionality into pieces that can be done a little at a time
+  * Should focus on one thing you can achieve quickly
+
+### Chapter 10: The Walking Skeleton
+
+* Build your infrastructure to support the way you want to test
+  * Don't let infrastructure dictate how you test
+  * Takes a while, but is worth it
+* Write e2e tests in terms of the business domain, not in terms of the UI or other tech details
+  * Hide UI details in test helpers
+  * Then tests can stay the same when implementations change
+* Write your first e2e test before anything else to help you make structural decisions about your system and deploy process
+* e2e tests are tricky because they run separately from system and can't peek inside it
+  * Must wait for some detectable effect
+  * Have to deal with asynchrony
