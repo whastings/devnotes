@@ -1,5 +1,35 @@
 # Programming Notes
 
+## OO Design
+
+* Methods should be commands or queries, not both
+  * Query returns something and has no side effects
+  * Command triggers side effects and returns nothing
+  * Test return values of query; side effects of command 
+
+## Testing
+
+* Keep tests readable by keeping code to a minimum
+  * Write helpers outside the tests to abstract setup and other details that are generic
+  * Put repeated expectations in functions to keep things DRY
+* Keep tests isolated from other tests
+  * Don't let them share the same state
+
+## Pragmatism
+
+* Software exists to solve business problems in order to decrease costs and increase revenue
+  * Not to please programmers
+  * Trouble happens when programmers use tools they don't need for problems they don't have
+  * Always look for business benefit before changing or adding code
+* Don't get too attached to any particular technology
+* Let your code grow organically, only solving problems that come up
+* The more you understand the business and problem domain you work in, the more effective you will be
+* Pay close attention to design and requirements, as they define the problem you're solving
+* Focus on solving problems and only optimize when you need to
+* Don't try to learn everything; learn as the need arises
+* See:
+  * http://lucasfcosta.com/2017/07/17/The-Ultimate-Guide-to-JavaScript-Fatigue.html
+
 ## Beware Abstractions
 
 * [Minimal API Surface Area - Learning Patterns Instead of Frameworks][min-api-surface]
