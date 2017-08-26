@@ -113,3 +113,9 @@
 * e2e tests are tricky because they run separately from system and can't peek inside it
   * Must wait for some detectable effect
   * Have to deal with asynchrony
+
+## Ch. 11: Passing the First Test
+
+* Create `ApplicationRunner` to handle running the app in test
+* You can write "ugly" code to test out your ideas, but don't leave it that way
+* Don't sweat design decisions too hard at this early stage
