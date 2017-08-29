@@ -28,3 +28,9 @@
 * Components return React elements
 * See:
   * https://tylermcginnis.com/react-elements-vs-react-components/
+
+## State
+
+* `setState` sometimes updates asynchronously, so you can't rely on `this.state` to immediately reflect changes
+  * If you need the changes reflected, use functional `setState`
+    * Pass `setState` a function that receives current state and props and returns updates

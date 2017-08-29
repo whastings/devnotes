@@ -30,8 +30,18 @@
 * See:
   * http://lucasfcosta.com/2017/07/17/The-Ultimate-Guide-to-JavaScript-Fatigue.html
 
-## Beware Abstractions
+## Abstractions
 
+* [Cost of Abstractions][cost-abstractions]
+  * Cost more to implement than direct approach
+  * Are flexible, while direct approach is rigid
+  * Have overhead of additional complexity
+    * Not worth it if only used once
+  * Are better for parts of system that change less often
+  * When to abstract
+    * "Abstractions only work well in the right context, and the right context develops as the system develops."
+    * "The right time to add an abstraction to a design is at the point when you start feeling the pain of not having it. Don't do it sooner because it's quite possible the extra work will be wasted and the extra complexity will be a burden. Don't wait too long because the whole time you're feeling the pain of not having the abstraction, more and more work is piling up that will have to be done to switch over to the abstraction."
+      * Otherwise you end up with an overly complex system that is full of unneeded abstractions that do more harm than good
 * [Minimal API Surface Area - Learning Patterns Instead of Frameworks][min-api-surface]
   * Prefer code that's repetitive and even verbose but explicit, using few abstractions
     * This is more code but easier to understand and change than implicit
@@ -56,4 +66,5 @@
 * "A dogma is born when the solutions are presented without enough original context, and newcomers feel pressured to delegate crucial decisions to an authority." -Dan Abramov, [The Case for Flux][case-for-flux]
 
 [case-for-flux]: https://medium.com/swlh/the-case-for-flux-379b7d1982c6
+[cost-abstractions]: http://sam-koblenski.blogspot.com/2014/07/the-cost-of-abstraction.html?m=1
 [min-api-surface]: https://2014.jsconf.eu/speakers/sebastian-markbage-minimal-api-surface-area-learning-patterns-instead-of-frameworks.html
