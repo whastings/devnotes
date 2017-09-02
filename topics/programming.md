@@ -7,6 +7,21 @@
   * Command triggers side effects and returns nothing
   * Test return values of query; side effects of command 
 
+## Best Practices
+
+* KISS: Keep it simple, stupid
+  * Do the simplest thing that could possibly work
+  * "Do only what is necessary to solve the problem at hand, and no more. Over-design is a house of cards, and if you can barely understand it when you're building it, it will all come crashing down when you're trying to maintain it six months from now. Do yourself, or the next programmer that has to look at your code, a favor and write it as cleanly and concisely as possible, and keep it simple" -Sam Koblenski
+* YAGNI: You ain't gonna need it
+* Occam's Razor
+  * Pursue the simplest explanation first
+  * Don't assume a bug is in library or platform code instead of your own
+* Amdahl's Law: Your program can only be as fast as it's slowest component
+  * So focus on optimizing the slowest parts
+  * Don't spend time making optimizations that aren't significant
+* Don't Let Standards Make You Stupid
+  * "while standards are generally a good thing, they should not preclude you from thinking about the problem at hand and solving it in the best way possible. Standards can add some uniformity and consistency to programming and offer known solutions to common problems, but standards can also go to far. They can become rigid structures that mask over issues that are unique to particular problems that require their own creative thinking" -Sam Koblenski
+
 ## Testing
 
 * Keep tests readable by keeping code to a minimum
