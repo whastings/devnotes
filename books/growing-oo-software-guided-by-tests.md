@@ -100,9 +100,13 @@
 
 * Learn to slice up functionality into pieces that can be done a little at a time
   * Should focus on one thing you can achieve quickly
+* Will build a program to bid on auction over the Internet
+  * Will receive latest bid plus required increment from service and make another bid if it's losing
+  * Will build as a Java Swing app communicating over XMPP
 
 ### Chapter 10: The Walking Skeleton
 
+* Will start by getting the app to connect to an auction and display text in a label in the UI
 * Build your infrastructure to support the way you want to test
   * Don't let infrastructure dictate how you test
   * Takes a while, but is worth it
@@ -117,5 +121,70 @@
 ## Ch. 11: Passing the First Test
 
 * Create `ApplicationRunner` to handle running the app in test
+  * Will tell the app what to do plus make assertions about state of UI
+* Also build a fake auction that emulates the real one plus makes assertions about messages received
 * You can write "ugly" code to test out your ideas, but don't leave it that way
 * Don't sweat design decisions too hard at this early stage
+
+## Ch. 12: Getting Ready to Bid
+
+* Get app to send a big to the auction
+  * Auction sends price then app responds with next bid
+  * App shows it's bidding after receiving price, then shows it has lost when auction says it closed
+* When testing and developing, start with triggering and outside event and looking for a visible
+  effect
+  * "Our approach to test-driven development is to start with the outside event that triggers the
+    behavior we want to implement and work our way into the code an object at a time, until we reach
+    a visible effect (such as a sent message or log entry) indicating that we’ve achieved our goal.
+    The end-to-end test shows us the end points of that process, so we can explore our way through
+    the space in the middle."
+* Create an `AuctionMessageTranslator` class to listen for events from XMPP chat then fire new
+  events in the app's domain
+  * Implements `processMessage`, calls `auctionClosed` and `currentPrice`
+  * Will send events to object implementing `AuctionEventListener` interface
+  * Then have `Main` implement `AuctionEventListener` so it can update the UI
+
+## Ch. 13: The Sniper Makes a Bid
+
+* Create `AuctionSniper` class to respond to price events
+  * Replaces `Main` as the implementer of `AuctionEventListener`
+    * Moves complexity out of `Main`
+  * But don't want it concerned with the UI
+  * So create a new `SniperListener` interface
+    * `AuctionSniper` will call a listener when UI needs updating
+      * Will call `sniperBidding`
+    * `Main` will implement `SniperListener` and continue handling UI updates
+  * Keep striving to follow Single Responsibility
+* Create an `Auction` to make chat requests on behalf of `AuctionSniper`
+  * `Auction` is a dependency whereas `SniperListener` is a notification
+  * Will implement `bid` and `join` for sniper to call
+  * `Auction` is interface, and `XMPPAuction` is created to implement it
+* When writing expected value in test, balance readability and maintainability
+  * "We've specified the expected bid value by adding the price and increment . There are different
+    opinions about whether test values should just be literals with “obvious” values, or expressed
+    in terms of the calculation they represent. Writing out the calculation may make the test more
+    readable but risks reimplementing the target code in the test, and in some cases the calculation
+    will be too complicated to reproduce."
+* Move UI handling out of `Main` by creating `SniperStateDisplayer` class that implements
+  `SniperListener`
+* Create `AuctionEvent` class inside `AuctionMessageTranslator` to encapsulate parsing auction
+  messages from chat
+  * Is a "value type"
+  * Is an example of "breaking out"
+* Sometimes create a "null implementation" of a method or class so you can continue to make progress
+  and keep focusing on the immediate task
+  * e.g. Creating a fake implementer of an interface in another object's unit test
+* Be prepared to defer refactoring code when it's not yet clear what to do
+
+## Ch. 14: The Sniper Wins an Auction
+
+* Make sniper bid and then win
+  * Will show winning when latest bid is its own
+  * Will show it has won when auction then closes
+* Create `PriceSource` enum with `FromSniper` and `FromOtherBidder` values so
+  `AuctionMessageTranslator` can tell sniper if it is the current winning bidder or not
+* Then update sniper to show it is winning or to make another bid based on `priceSource`
+* Add state to sniper of whether it is currently winning or losing so it can react appropriately
+  when auction closes
+  * Will call either `sniperLost` or `sniperWon` on the `SniperListener`
+  * Create `isWinning` boolean instance variable
