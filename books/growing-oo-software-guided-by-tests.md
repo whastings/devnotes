@@ -188,3 +188,55 @@
   when auction closes
   * Will call either `sniperLost` or `sniperWon` on the `SniperListener`
   * Create `isWinning` boolean instance variable
+
+## Ch. 15: Towards a Real User Interface
+
+* Change the UI from a single label to a table with auction ID, last price, last bid
+* Create a `SnipersTableModel` class extending `AbstractTableModel` to add content to a Swing
+  `JTable`
+* First, replace label showing status text with table showing it
+  * For now, only keeps track of status text
+* Next, update app to display item ID, last price, last bid, and status in table
+  * First, update tests to look for table row with all required info instead of just label with
+    status text
+  * Must pass sniper state to all event handling methods from `SniperListener`, so create
+    `SniperState` value type to prevent duplication
+    * Holds item ID, price, and bid
+    * `SniperStateDisplayer` will use to update the `SnipersTableModel`
+  * Update `SnipersTableModel` test to make sure it stores `SniperState` when it gets it and
+    notifies `JTable` that it has updated data
+    * Implements `getValueAt` that `JTable` will call with `rowIndex` and `columnIndex` to get data
+      for each cell of the table
+  * Decide to add status to `SniperState` rather than creating different objects for winning,
+    losing, won, and lost
+    * Rename `SniperState` to `SniperSnapshot` to better reflect its purpose
+    * Create `SniperState` enum with `JOINING`, `BIDDING`, etc.
+    * Replace `sniperBidding`, `sniperWinning`, etc. with `sniperStateChanged` on `SniperListener`
+    * Remove `isWinning` instance variable from `AuctionSniper` and have it store last snapshot
+    * Make `SnipersTableModel` the new `SniperListener` to shorten event path
+* Design had to change in this chapter
+  * Not necessarily a bad thing, as writing code is usually what helps improve a design
+* Can be helpful to create a `Defect` exception type to throw in places where an error can only
+  happen due to a programming mistake
+* Were careful to keep business logic out of the UI, as UI code becomes brittle when business logic
+  is mixed in
+  * Also harder to change
+* Intentionally made incremental changes all the way through the system
+  * e.g. First label to table with status, then table with more details
+  * Avoided making huge changes to app all at once
+    * Makes it easier to merge work with rest of team and avoid long-lived feature branches
+  * a.k.a "keyhole surgery"
+* Value your time and watch out for wasteful boilerplate
+  * Could indicate an abstraction is missing
+* Need to be able to balance tradeoff of whether to change design now or wait till later
+  * "Deciding when to change the design requires a good sense for tradeoffs, which implies both
+    sensitivity and technical maturity: “I’m about to repeat this code with minor variations, that
+    seems dull and wasteful” as against “This may not be the right time to rework this, I don’t
+    understand it yet.”"
+  * As you're coding, reflect on if you're spending your time the best way
+* Don't be afraid to rename things as the design evolves
+  * "Just as we learn more about what the structure should be by using the code we've written, we
+    learn more about the names we’ve chosen when we work with them. We see how the type and method
+    names fit together and whether the concepts are clear, which stimulates the discovery of new
+    ideas. If the name of a feature isn’t right, the only smart thing to do is change it and avoid
+    countless hours of confusion for all who will read the code later."
