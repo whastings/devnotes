@@ -1,5 +1,31 @@
 # Book Notes: Growing Object-Oriented Software Guided by Tests
 
+## Ch. 1: What Is the Point of Test-Driven Development?
+
+* It's important to deploy completed work frequently so you can get feedback
+  * Will help you check assumptions against reality, measure progress, find errors, and adapt your
+    plan in response to what you learned
+* Incremental/Iterative Development: Build each feature as a working, end-to-end slice
+* Write code that's simple to understand and modify
+  * Code is read more than written, so optimize for that
+  * Will make handling unanticipated changes easier
+* TDD gives feedback on code's design quality
+* Writing testable code leads to more modular code and loosely coupled so you can test it in
+  isolation
+* TDD makes you figure out the definition of "done" for your next piece of work before you start it
+* Start a feature by writing an acceptance test
+  * Defines when the feature it done
+  * Can't just have unit tests, as then you won't know if all the parts can work together
+  * Can have acceptance tests not be able to fail a build until the feature they're testing is
+    completed
+  * Should only interact with the code from the outside, not call internal methods
+  * Ideally, will also exercise the build and deploy process of the code
+* Integration tests see if your code works with code you can't change
+  * e.g. A third-party library
+  * Good for testing abstractions you build around external code
+* If it's hard to write a test for a class, there's probably an issue with its design
+  * e.g. It has too many dependencies on distant things
+
 ## Ch. 3: An Introduction to the Tools
 
 * They'll be using JUnit and jMock2 to demo TDD in the book
