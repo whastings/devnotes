@@ -240,3 +240,40 @@
     names fit together and whether the concepts are clear, which stimulates the discovery of new
     ideas. If the name of a feature isn’t right, the only smart thing to do is change it and avoid
     countless hours of confusion for all who will read the code later."
+
+## Ch. 16: Sniping for Multiple Items
+
+* First, update tests and `ApplicationRunner` so it can take an auction as an argument to each of
+  its methods
+  * Made its `startBiddingIn` method take a variable number of auctions
+* Next, update `Main.main` to take a variable number of item IDs
+  * Have it look over each one and call its `joinAuction` method for it
+* Then, add `addSniper` method to `SnipersTableModel` so `joinAuction` in `Main` can call it
+  * Update model's test to confirm calling `addSniper` notifies the `JTable` listener
+  * Update model to hold multiple `SniperSnapshot`s
+  * Add `isForSameItemAs(snapshot)` to `SniperSnapshot` so table can easily tell when two snapshots
+    are for the same item
+  * Write test to confirm model displays snipers in the order they were added
+* Next, add a text field and button to top of UI so user can join an auction with an item ID
+  * Add `startBiddingFor(itemId)` method to `AuctionSniperDriver` so end-to-end test will join
+    each auction via the UI
+  * Test fails because UI hasn't been added yet, so add text field and button to UI
+  * Now test fails because using the UI doesn't join an auction
+  * Need to add an event listener to the button that gets item ID from text field, creates a chat
+    connection to the auction server, and adds a row to UI table model
+    * Want to keep chat connection out of UI code (`MainWindow`)
+  * Create a `UserRequestListener` interface so `MainWindow` can let `Main` know when user wants
+    to join a new auction
+    * Have to write integration test for `MainWindow` since Swing code is async
+    * `UserRequestListener` will implement `joinAuction(itemId)`
+    * Add `addUserRequestListener` to `MainWindow` and update it to add an `ActionListener` to the
+      button
+      * When button clicked, `MainWindow` will translate the UI event into a business domain event
+  * Next, update `Main` to register itself as a `UserRequestListener` that will add a new row to the
+    `SnipersTableModel` when the user asks to join a new auction
+    * Will also create a new `Chat` and `XMPPAuction` and hook up the chat to an
+      `AuctionMessageTranslator` and an `AuctionSniper`
+* Now things are looking pretty good, but `Main` has a lot of compromises
+* Continuing to write tests first keeps design focus and behavior in the right objects
+* Want to work on breaking up `Main` next, as it has lots of responsibilities and can only be tested
+  with end-to-end tests
