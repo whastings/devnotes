@@ -26,6 +26,40 @@
 * If it's hard to write a test for a class, there's probably an issue with its design
   * e.g. It has too many dependencies on distant things
 
+## Ch. 2: Test-Driven Development with Objects
+
+* OO design is more about communication between objects than the objects themselves
+* "An object-oriented system is a web of collaborating objects. A system is built by creating
+  objects and plugging them together so that they can send messages to one another. The behavior of
+  the system is an emergent property of the composition of the objects—the choice of objects and how
+  they are connected"
+* Can change an OO system by changing the composition of its objects
+* Be careful to distinguish value types from object types
+  * Value: Models an unchanging quantity or measurement
+    * Have no useful identity, so two instances with the same data are basically the same thing
+  * Object: Container of mutable state that models behavior over time
+    * Two instances have distinct identities even if at the moment they have the same state
+  * It's confusing because in most languages both are implemented by classes
+* Objects are interchangeable when they follow common communication patterns and have explicit
+  dependencies
+* Tests help you see the communication between your objects
+* Roles, Responsibilities, & Collaborators
+  * Responsibility: An obligation to perform a task or know some info
+  * Role: A set of related responsibilities
+    * An object can play one or more roles
+    * In strongly typed languages, roles are often represented by interfaces
+  * Collaboration: Interaction between objects and or roles
+* CRC Cards: Method for thinking about possible objects or roles
+  * CRC = Candidates (possible role or class), Responsibilities, Collaborators
+* Tell, Don't Ask: "the calling object should describe what it wants in terms of the role that its
+  neighbor plays, and let the called object decide how to make that happen."
+  * Better to have a high level method that makes explicit what one object offers than a bunch of
+    low-level method/getter calls
+  * Try to limit "asking" to value objects, as query methods on regular objects can result in them
+    leaking state
+* Use tests to discover the roles your object needs to interact with
+  * Depends on creating mock objects to stand in for real objects
+
 ## Ch. 3: An Introduction to the Tools
 
 * They'll be using JUnit and jMock2 to demo TDD in the book
