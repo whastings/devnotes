@@ -337,3 +337,66 @@
 * Continuing to write tests first keeps design focus and behavior in the right objects
 * Want to work on breaking up `Main` next, as it has lots of responsibilities and can only be tested
   with end-to-end tests
+
+## Ch. 17: Teasing Apart Main
+
+* Goal: Separate UI, chat, and sniping logic in incremental steps without breaking the app
+* A top-level class like `Main` should introduce components to each other and then step into the
+  background and wait for the program to finish
+  * But `Main` currently implement some component logic as well as starting the program
+* First, will isolate the chat logic
+  * Need to separate it from the auction and sniper related code
+  * Use the `Announcer` class to create a list of event listeners for the `AuctionMessageTranslator`
+    to call and add the sniper to the list
+    * So the translator doesn't have a direct reference to the sniper and can have multiple
+      listeners
+  * Then move chat creation into `XMPPAuction`
+    * In its constructor will create chat from passed connection and new translator connected to the
+      chat and the announcer
+      * Ideally, would prefer the constructur to have fewer assumptions and just set fields w/o
+        causing side effects, but will keep it for now
+    * The `Main` can just pass the new `AuctionSniper` to the auction's `addAuctionEventListener`,
+      which will proxy it to the translator
+    * Write integration test to confirm `XMPPAuction` can listen to the chat
+    * Now that `XMPPAuction` encapsulates creation and interaction with the chat, put it and
+      `AuctionMessageTranslator` into `auctionsniper.xmpp` package
+  * Next, create an Auction House as a factory for creating `Auction`s
+    * Create `AuctionHouse` interface and `XMPPAuctionHouse` class
+    * Then can move the XMPP connection code out of `Main`
+    * Will implement `connect(host, username, password)` for connecting to chat server
+    * Will implement `auctionFor(itemId)` to be called when UI requests to join an auction
+* Now the UI code
+  * Next, create the `SniperLauncher` class to replace the anonymous implementation of
+    `UserRequestListener` in `Main`
+    * Will take care of getting auctions from the `AuctionHouse` and managing the
+      `SnipersTableModel`, provided they are passed to its constructor
+    * Implements `joinAuction` for the UI to call
+      * Will handle creating new `AuctionSniper`s and connecting them to the UI's table model via
+        `SwingThreadSniperListener`
+        * But want to get the Swing-related code out of there
+  * Next, create a `SniperCollector` interface and update the `SnipersTableModel` to implement it
+    * `SniperLauncher` will pass it `AuctionSniper`s and it will deal with connecting them to the UI
+    * Will get `SniperSnapshot` from the sniper and notify the `JTable` to add it to the UI
+    * Will hook up the sniper to the `SwingThreadSniperListener`
+    * This gets UI logic out of the launcher
+  * Next, create `SniperPortfolio` to hold all the snipers
+    * So the table model doesn't have to be responsible for both keep track of the sniping activity
+      and updating the UI
+    * Move implementation of `SniperCollector` from table model to the portfolio
+    * Update `MainWindow` to be instantiated with a `SniperPortfolio`
+    * Create `PortfolioListener` interface with `sniperAdded` method and have `SnipersTableModel`
+      implement it
+      * `MainWindow` now instantiates the table model and passes it to the portfolio via its
+        `addPortfolioListener` method
+  * Now all `Main` does it create the portfolio and the `MainWindow`, and add the `SniperLauncher`
+    as the main window's UI request listener
+* Now the app is separated into three components:
+  * The core
+  * XMPP communication
+  * The Swing UI
+* Worked to keep external infrastructure details out of core domain code
+* Made sure to work incrementally
+  * "By repeatedly fixing local problems in the code, we find we can explore the design safely,
+    never straying more than a few minutes from working code. Usually this is enough to lead us
+    towards a better design, and we can always backtrack and take another path if it doesn’t work
+    out."
