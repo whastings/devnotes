@@ -147,4 +147,58 @@
 
 * Inheritance is a mechanism for automatic message delegation
   * If object's class doesn't understand the message, it'll forward to message to its superclass
-*
+* Example: `Bicycle` class that's instantiated with `size` and `tape_color`
+  * Has `spares` method that returns hash of `chain` (e.g. `10-speed`), `tire_size`, and
+    `tape_color`
+  * This works for road bikes, but what if we now have to support mountain bikes?
+  * Mountain bike needs to know about its `front_shock` and `rear_shock`
+  * Could add a `style` instance variable to `Bicycle` so it can support both road and mountain
+    bikes
+    * But this won't scale if we have to support more bike types in the future
+    * And some instances will respond to `tape_color` or `front_shock` and others won't
+  * `Bicycle` has some code that applies to all bikes, some that just applies to road bikes, and
+    some that just applies to mountain bikes
+    * "This is the exact problem that inheritance solves; that of highly related types that share
+      common behavior but differ along some dimension."
+* When there's a conditional determining what message to send to `self`, inheritance may be in order
+* Watch out for variables used to describe the type or category of an object
+* A subclass delegates an unknown message to its superclass
+  * So a subclass is everything its superclass is plus more (a specialization)
+* First attempt: Create a `MountainBike` subclass of `Bicycle`
+  * Implements `initialize` to handle `front_shock` and `rear_shock`, passing rest of init data to
+    `super`
+  * Implements `spares` to get default hash from `super` and merge in `rear_shock`
+    * But now `MountainBike` still reports needing handlebar tape, as `Bicycle` really represents a
+      road bike
+* Next, move road bike specific logic into a `RoadBike` subclass of `Bicycle`
+  * Now `Bicycle` can be an abstract class that's a "common repository of behavior" for subclasses
+    to share
+  * Better to wait to create an abstract class until you have at least two, preferably three,
+    subclasses
+    * May be better to duplicate code until you know more
+* When creating an abstract class from an existing one, it's best to create an empty abstract class
+  and selectively "promote" bits of behavior from the previous class to the abstract one
+  * So rename `Bicycle` to `RoadBike` and create an empty `Bicycle` to be abstract
+  * If you try to pull down just parts relevant to concrete class, you may accidentally leave
+    concrete details in the superclass
+  * If you forget to promote something, it'll become apparent when another subclass needs it
+* When making a decision, ask "what will happen if I'm wrong?" and look for the decision where the
+  answer is the best
+* Next, create accessors in `Bicycle` for `size`, `chain`, and `tire_size`, which are common to all
+  bikes
+* Template Method pattern:
+  * Involves the superclass sending messages to subclasses to give them a chance to contribute
+    specializations
+  * e.g. `Bicycle#initialize` can call `default_chain` and `default_tire_size` to get the default
+    values of these from its subclasses
+  * Superclass should implement all messages that it sends to subclasses, raising a
+    `NotImplementedError` for ones that subclasses must override
+  * Use it to avoid using `super`
+    * If you have a method that must send `super`, someone will forget to call it
+    * Also it causes subclasses to know too much about their superclass and be too tightly coupled
+      to them
+    * The super class should instead send *hook messages* to subclasses
+    * e.g. `Bicycle` can send `post_initialize` and `RoadBike` and `MountainBike` can implement it
+      instead of defining `initialize` with `super`
+    * e.g. `Bicycle#spares` sends `local_spares` and merges result into hash
+  * How the template method is used can change in superclass with requiring subclasses to change
