@@ -202,3 +202,34 @@
       instead of defining `initialize` with `super`
     * e.g. `Bicycle#spares` sends `local_spares` and merges result into hash
   * How the template method is used can change in superclass with requiring subclasses to change
+
+## Ch. 7: Sharing Role Behavior with Modules
+
+* "Because no design technique is free, creating the most cost-effective application requires making
+  informed tradeoffs between the relative costs and likely benefits of alternatives."
+* Sometimes otherwise unrelated objects play the same role
+  * And sometimes they need to share behavior
+  * e.g. The `Preparer` role for objects that prepare for `Trip`s (`Mechanic`, `TripCoordinator`,
+    `Driver`)
+    * The `Trip` can also be considered to play the `Preparable` role
+* Ruby provides modules for sharing role behavior between unrelated objects
+  * Including a module in an object makes it possible for the object to automatically delegate
+    unknown method calls to it
+* Example: A trip `Schedule` class that implements `scheduled?`, `add`, `remove`, and `schedulable?`
+  * It can take `Schedulable` objects that respond to a `lead_days` method
+    * `lead_days` returns how many days in between trips for that type of object
+  * Even better: Have `Schedulable` objects implement `schedulable?` and deal with the `Schedule`
+    themselves
+    * Then create a `Schedulable` module to define `schedulable?`
+* Like with abstract classes, a module should provide an implementation of every message it sends to
+  `self`
+  * Even if that's just raising `NotImplementedError`
+* Modules can also use the Template Method pattern to allow including classes to supply
+  specializations w/o knowing too much
+* Modules are placed in the method lookup path in reverse order of inclusion
+* Modules make it possible to write crazy code that's impossible to extend
+* Methods in a module should apply to all objects that include it
+  * Not just some of the methods for some objects
+  * Same goes for abstract classes
+* Keep your inheritance hierarchies shallow
+  * Template methods don't work across more than one level
