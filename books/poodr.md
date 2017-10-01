@@ -233,3 +233,45 @@
   * Same goes for abstract classes
 * Keep your inheritance hierarchies shallow
   * Template methods don't work across more than one level
+
+## Ch. 8: Combining Objects with Composition
+
+* In composition, an object has a *has-a* relationship with its parts
+* Example: A `Parts` class that a `Bicycle` has to hold its parts
+  * Will hold list of parts and know which need spares
+  * Can have `RoadBikeParts` and `MountainBikeParts` subclasses of `Parts`
+* Then, create a `Part` class to represent a single part
+  * Will have `name` and `description`
+  * `Part` can implement a `needs_spare` method that `Parts` can call
+  * Then you can use `Parts` directly and just pass it an array of mountain bike parts or road bike
+    parts
+* Then, can create a `PartsFactory` to produce parts needed for mountain or road bikes
+  * Can encapsulate knowledge of what parts each type of bike needs in a data structure that
+    `PartsFactory` knows how to read
+* Ruby's `OpenStruct` class is good for implementing simple types like `Part`
+  * Is like `Struct` but takes a hash instead of positional arguments
+* Is now easy to add new types of bikes
+* Formally, composition means the parts of an object have no life outside of it
+  * **Aggregation:** Like composition, but the parts do have independent lives
+* Composition vs. Inheritance
+  * Composition doesn't support automatic message delegation; calls to objects must be explicit
+  * Generally, prefer composition over inheritance because composition has fewer built-in
+    dependencies
+  * Inheritance has benefits, but only for a correctly-modeled hierarchy
+    * In which subclasses really are specializations of superclasses
+    * You can make big changes with small code changes to methods at top of hierarchy
+    * Can easily add new subclasses for additional variants
+    * Existing subclasses server as examples for how to add new subclasses
+  * If hierarchy is incorrectly-modeled, benefits become costs
+    * Hard to make changes at top of hierarchy
+    * Can't create a subclass that's a mixture of two existing subclasses (e.g.
+      `RecumbentMountainBike`)
+  * Avoid using inheritance as an API for reusable libraries
+  * Composition allows you to create new variants by plugging in a new object for an existing part
+    as long as it implements the same interface
+  * But a composed object may be hard to understand if it has many parts
+  * Inheritance works well for types that fall into obvious specialization hierarchies
+* Remember that duck types are better when many type of objects need to play a common role
+  * Usually the role is not the main responsibility of any one type
+  * e.g. A `Bicycle` is `Schedulable`
+  * You have to be careful to notice when a role exists
