@@ -400,3 +400,21 @@
     never straying more than a few minutes from working code. Usually this is enough to lead us
     towards a better design, and we can always backtrack and take another path if it doesn’t work
     out."
+
+## Ch. 18: Filling In the Details
+
+* Add ability to stop bidding once a stop price is reached
+* Have followed agile pattern: focus on proving concept and get support to continue, then implement
+  enough functionality to deploy
+* Create new state for when sniper has been outbid
+  * It'll stay in auction so user can know how much they lost by
+* Start with an acceptance test
+  * Add `startBiddingWithStopPrice` and `hasShownSniperIsLosing` to the `ApplicationRunner`
+* Add text field to UI to accept stop price
+* Create an `Item` class to hold the item ID and stop price from the UI
+  * Better than adding a new stop price arguments to all methods in the chain
+  * Is example of "budding off"
+  * Good to main domain concepts explicit
+* Then update `AuctionSniper` to stop bidding at stop price
+  * Calls `allowsBid(bid)` on `Item` to see if it should continue bidding or stop
+* Drew a state transition diagram to help figure out what tests to write
