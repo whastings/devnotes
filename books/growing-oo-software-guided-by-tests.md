@@ -450,3 +450,37 @@
     * Is an interface like the UI
     * Should be properly abstracted; don't put ad hoc logging calls carelessly throughout code
     * Logging infrastructure and implementation details should be isolated
+    * Develop logging against a stakeholder's requirements using TDD
+    * Ideally, logging is an implementation detail that the rest of your code can ignore when it
+      notifies your logging infrastructure that something has occurred
+      * Write logger interface in terms of the app domain
+
+## Ch. 20: Listening to the Tests
+
+* TDD gives you feedback on internal quality of code
+  * On coupling, cohesion, dependencies, information hiding
+* Make dependencies on time explicit
+  * e.g. pass in a date instead of creating it inside class
+* Strive to make boundaries of an object clearly visible
+  * "An object should only deal with values and instances that are either local—created and managed
+    within its scope—or passed in explicitly,"
+  * Then object is context-independent and can be easily moved and reused
+* Don't use magic testing tools to allow for poorly managed dependencies
+* Strive to only mock interfaces, not concrete classes
+  * An interface describes a role an object plays and its relationship to the consuming object, so
+    mocking the interface in tests maks this relationship explicit
+  * Naming interfaces helps you think in detail about a concept
+* Prefer to write a facade in front of an external library and then mock the facade instead of the
+  library
+* Don't bother mocking value objects; just use them directly
+* Watch out for bloated constructors that take too many arguments
+  * Maybe some of the arguments can be combined into one object that represents an overall concept
+    * Look for things that are always used together
+  * Dependencies should always be passed into the constructor, but notifications and adjustments can
+    be set to defaults and reconfigured later
+    * Adjustments = Parts of a composite object
+      * e.g. A `RacingCar`'s tires are adjustments, while a track is a dependency
+      * Should be able to replace them in unit tests
+* Keep number of expectations to a minimum to keep it clear what's important
+  * Just stub out a call to an object that's unimportant to the test instead of setting an
+    expectation on it
