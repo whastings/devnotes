@@ -418,3 +418,35 @@
 * Then update `AuctionSniper` to stop bidding at stop price
   * Calls `allowsBid(bid)` on `Item` to see if it should continue bidding or stop
 * Drew a state transition diagram to help figure out what tests to write
+
+## Ch. 19: Handling Failure
+
+* Have app write to a log file if something goes wrong
+* If Auction sends back malformed message, will show it as "failed" in UI and ignore further
+  messages
+* Create end-to-end test
+  * Add `sendInvalidMessageContaining` to fake auction server and `showsSniperHasFailed` to
+    `ApplicationRunner`
+* Add `auctionFailed` method to `AuctionEventListener` interface
+  * `AuctionMessageTranslator` will call it if it can't parse the message
+* Also mark as failed if message is missing a required field
+* Remove sniper's translator from chat's message listeners to ignore further updates
+  * Create an `AuctionEventListener` implementation that will do this when it receives
+    `auctionFailed` call
+    * Could have done this in the translator, but that wouldn't respect SRP
+* Next, write failing test for recording message to log file
+  * Create `AuctionLogDriver` to read log file from disk and make assertions about entries it has
+* Create `XMPPFailureReporter` interface for object that logs message and pass it as dependency to
+  translator
+  * Translator can call its `cannotTranslateMessage` method
+* Then create `LoggingXMPPFailureReporter` implementation of `XMPPFailureReporter`
+  * Will actually write to file
+  * Pass it to `XMPPAuctionHouse` so it can pass it to every translator
+* Important concepts
+  * Add functionality in small, coherent slices
+  * Keep code well-structured so it can be extended
+  * Refactor frequently to make space for new functionality
+  * Treat production logging like the external interface it is
+    * Is an interface like the UI
+    * Should be properly abstracted; don't put ad hoc logging calls carelessly throughout code
+    * Logging infrastructure and implementation details should be isolated
