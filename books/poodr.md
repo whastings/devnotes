@@ -275,3 +275,102 @@
   * Usually the role is not the main responsibility of any one type
   * e.g. A `Bicycle` is `Schedulable`
   * You have to be careful to notice when a role exists
+
+## Ch. 9: Designing Cost-Effective Tests
+
+* "From a practical point of view, changeability is the only design metric that matters; code that’s
+  easy to change is well-designed."
+* In addition to being skilled in design, you need to be skilled in refactoring
+  * Refactoring is a process that doesn't alter behavior but incrementally changes code until it
+    transforms the design into an improved one
+* "Good design preserves maximum flexibility at minimum cost by putting off decisions at every
+  opportunity, deferring commitments until more specific requirements arrive. When that day comes,
+  refactoring is how you morph the current code structure into one that will accommodate the new
+  requirements."
+* Finally, learn to write good tests
+  * Shouldn't have to rewrite them when code is refactored
+* Tests, like design, exist to reduce costs
+  * They help you find bugs
+  * They serve as documentation for your code
+  * Confirm things still work when you refactor
+  * Support you in writing more abstractions
+  * Help expose design flaws in code
+    * "If a test requires painful setup, the code expects too much context. If testing one object
+      drags a bunch of others into the mix, the code has too many dependencies. If the test is hard
+      to write, other objects will find the code difficult to reuse."
+* Many programmers write too many tests
+  * Strive to test each thing in just one place
+* Strive for loose coupling between tests and your object just like between objects
+  * If a test is too coupled, it will be forced to change unnecessarily
+* Only test the public interface of an object, not unstable internal details
+* Tests should focus on an object's incoming and outgoing messages
+* Two types of outgoing messages
+  * Queries: Messages that ask about the state of another object
+    * Tests for object sending query shouldn't test the message but instead leave that to the
+      receiving object's tests
+    * So tests for an object should ignore its outgoing query messages (not make expectations)
+  * Commands: Messages that ask another object to perform a side effect
+    * Tests for object sending message should verify message is sent
+      * Verify number of times sent and with what arguments
+      * But don't verify message return value, as that's for that object's tests
+    * Use **mock objects** to make assertions about command messages sent
+* Test incoming messages for what they return or what side effects they cause
+  * Better if a method either returns a result (query) or performs a side effect (command), not both
+* Write tests first when it makes sense
+  * Helps make object more reusable
+  * Helps make object more testable
+* TDD vs. BDD
+  * "Both styles create code by writing tests first. BDD takes an outside-in approach, creating
+    objects at the boundary of an application and working its way inward, mocking as necessary to
+    supply as-yet-unwritten objects. TDD takes an inside-out approach, usually starting with tests
+    of domain objects and then reusing these newly created domain objects in the tests of adjacent
+    layers of code."
+* Example: Testing `Gear#gear_inches`, which calls `Wheel#diameter`
+  * Should pass in `Wheel` instead of creating it inside `Gear`
+    * `Wheel` plays the role `Diameterizable`
+    * Exposes `Diameterizable` as a dependency of `Gear`
+* Passing same type of object for dependency in test as in app code means the tests will always
+  break when they should
+  * But could slow down or complicate tests if real object is slow to run or complicated to use
+  * Roles tend to be more stable than the objects that play them, which is why good design suggests
+    you inject dependencies into an object
+  * If there are many players of a role, you probably don't want to couple your object to one
+    implementation of it
+* Can create a **test double** that plays the same role as the specific object your
+  object-under-test depends on
+  * But if method name in real object changes, your test now won't catch it
+  * The test double plays the role and so must be updated when the role's interface changes
+    * And so roles should have tests of their own (see below)
+* Avoid testing private methods since they're tested via public method tests and are most likely to
+  change
+  * "If you create a mess and never fix it your costs will eventually go up, but in the short term,
+    for the right problem, having enough confidence to write embarrassing code can save money. When
+    your intention is to defer a design decision, do the simplest thing that solves today’s problem.
+    Isolate the code behind the best interface you can conceive and hunker down and wait for more
+    information."
+  * Testing private methods can help if they're complex/messy by giving you better failure messages
+* Duck Types/Roles should have their own tests
+  * e.g. The `Preparer` role that Bike `Trip`s call
+  * You can use a Ruby module to define and share tests for a role amongst tests for objects that
+    play that role
+  * If only one object plays a role so far, you can leave role tests inside that object's tests
+    until another player emerges
+  * Then the tests document the existence of the role
+* When a test double plays a role, you should write tests for that double that include the shared
+  tests for that role
+  * Then test double won't get left behind if role's interface changes, and tests won't pass when
+    code is really broken
+* When testing inheritance hierarchies:
+  * Write a shared set of tests for the class public interface that the base class and all
+    subclasses must pass
+    * Makes sure you're keeping subclass instances substitutable for each other
+  * Also write a shared set of tests that ensure all subclasses appropriately implement the template
+    methods that the base class requires from them
+  * And write tests for the base class to confirm that it enforces the behavior of its subclasses
+    * e.g. Raises a `NotImplementedError` for template methods
+  * When testing the specializations of a subclass, avoid embedding knowledge of the superclass into
+    the subclass's tests
+    * Test the specialized way the subclass implements the superclass's template methods
+    * Don't have the subclass tests know about the common interface methods
+  * Test abstract base classes by creating a subclass just for testing purposes
+    * Then you can stub out any template methods
