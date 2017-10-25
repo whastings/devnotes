@@ -516,3 +516,14 @@
       details out of the tests
     * They make it easy to support lots of variations in constructor arguments
 * Aim for tests that are declarative descriptions of code features
+
+## Ch. 23: Test Diagnostics
+
+* Test assertions should provide detailed failure messages so a dev doesn't have to spend time
+  debugging why a test failed
+* First, keep tests small and give them descriptive names
+* If assertion library lets you pass a failure message with an assertion, do it
+* You can make primitive values descriptive of what they're used for in the tests
+  * e.g. `AN_INVALID_STRING = "invalid string"`
+* **Tracer Objects** are objects that have no behavior except to produce descriptive error messages
+* Before making failing tests pass, make sure the failure messages are clear and informative
