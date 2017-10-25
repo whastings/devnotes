@@ -502,3 +502,17 @@
   * "The assertions and expectations of a test should communicate precisely what matters in the
     behavior of the target code."
 * Use descriptive constants and variables to describe the meanings of literal values
+
+## Ch. 22: Constructing Complex Test Data
+
+* Object creation code can clutter tests and make them hard to read
+  * Also break more easily when object construction details change
+* Better to abstract object creation into helper objects
+  * **Object Mother:** Supplies descriptively-named factory methods for constructing objects
+  * **Test Data Builders:** Objects that use the *builder pattern* to construct objects for tests
+    * Will have fields and setters for each constructor argument the object it's creating takes
+    * Should provide default values for object's constructor arguments that tests can override
+    * You can wrap creation of the builders themselves in factory methods to keep their creation
+      details out of the tests
+    * They make it easy to support lots of variations in constructor arguments
+* Aim for tests that are declarative descriptions of code features
