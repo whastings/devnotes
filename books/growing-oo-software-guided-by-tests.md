@@ -527,3 +527,34 @@
   * e.g. `AN_INVALID_STRING = "invalid string"`
 * **Tracer Objects** are objects that have no behavior except to produce descriptive error messages
 * Before making failing tests pass, make sure the failure messages are clear and informative
+
+## Ch. 24: Test Flexibility
+
+* A test should only fail when the code relevant to it is broken
+* A test should "specify precisely what should happen and no more"
+  * "Avoid asserting values that aren't driven by the test inputs, and avoid reasserting behavior
+    that is covered in other tests."
+  * If only one piece of a result matters, test just that piece instead of comparing the entire
+    result
+    * "Different test scenarios may make the tested code return results that differ only in specific
+      attributes, so comparing the entire result each time is misleading and introduces an implicit
+      dependency"
+    * e.g. Check that a certain value is included in a resulting string instead of asserting the
+      entire format of the string
+      * Though if there's a lot of data in a string, it could be an indication you're missing a
+        value object to structure the data
+* Allowances vs. expectations
+  * Allowances allow a mock object to optionally receive a call but don't enforce it
+    * Use to ignore mock calls that aren't important to the behavior currently being tested
+      * But make sure ignored features are tested somewhere
+    * Can be used to feed values into tested object
+  * Expectations expect that a mock object will receive a call
+    * "Expectations describe the interactions that are essential to the protocol we're testing"
+* "Allow queries; Expect commands"
+  * "Commands are calls that are likely to have side effects, to change the world outside the target
+    object."
+  * "Queries don’t change the world, so they can be called any number of times, including none."
+* Don't set expectations on the order of mock method calls unless order really matters
+* **Guinea Pig Object:** A fake object that stands in for an application domain object during a test
+  * Use them so your tests aren't coupled to real domain objects
+  * They can written in a way that's much more descriptive
