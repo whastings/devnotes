@@ -484,3 +484,21 @@
 * Keep number of expectations to a minimum to keep it clear what's important
   * Just stub out a call to an object that's unimportant to the test instead of setting an
     expectation on it
+
+## Ch. 21: Test Readability
+
+* Tests should concretely describe what code does but be abstract about how it works
+* "name tests in terms of the features that the target object provides"
+  * "the test name should say something about the expected result, the action on the object, and the
+    motivation for the scenario."
+* Write tests using a standard structure so they're easy to skim
+* One test should exercise one coherent feature
+  * Not limited to one assertion but shouldn't be more than a handful
+* Keep tests as simple as possible by moving as many implementation details as possible into helper
+  methods or objects
+  * A test should just contain what's necessary to understand it at a high level
+* Don't catch an exception unless you're going to assert something about it
+* Tests shouldn't assert too much or too little detail
+  * "The assertions and expectations of a test should communicate precisely what matters in the
+    behavior of the target code."
+* Use descriptive constants and variables to describe the meanings of literal values
