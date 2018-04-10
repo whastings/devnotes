@@ -57,6 +57,7 @@
     * "Abstractions only work well in the right context, and the right context develops as the system develops."
     * "The right time to add an abstraction to a design is at the point when you start feeling the pain of not having it. Don't do it sooner because it's quite possible the extra work will be wasted and the extra complexity will be a burden. Don't wait too long because the whole time you're feeling the pain of not having the abstraction, more and more work is piling up that will have to be done to switch over to the abstraction."
       * Otherwise you end up with an overly complex system that is full of unneeded abstractions that do more harm than good
+  * "we use abstractions because we perceive the benefit outweighs the cost... So when you’re considering implementing a particular tool, library, or pattern, it’s very important to think critically about the costs and benefits... you have to understand the problems it solves, how it goes about solving those problems (especially when compared to alternatives), and (most importantly) whether you have those problems to begin with. If you don’t have the problem, then you’re incurring the cost of abstraction without reaping the benefits!" - [Kent C. Dodds](https://blog.kentcdodds.com/when-to-not-use-render-props-5397bbeff746)
 * [Minimal API Surface Area - Learning Patterns Instead of Frameworks][min-api-surface]
   * Prefer code that's repetitive and even verbose but explicit, using few abstractions
     * This is more code but easier to understand and change than implicit
