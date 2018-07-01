@@ -68,3 +68,20 @@
   * When used with a `row` template, it won't have an affect by default since item height is based on its content
     * But if you give the grid container a height greater than all its items, they'll grow to take up the container's height
 * If you use `auto` on a row or column, its items will grow to the height or width of the content of the largest item
+
+### Sizing Grid Items
+
+* `grid-column` lets you control the column sizing of a grid item
+  * It can take a start column number and an end column number, separated by a `/`
+    * e.g. `grid-column: 2 / 5`
+    * NOTE: The end column number means up to but not including that column
+    * You can use `-1` to refer to the last column, `-2` for the second-to-last column, etc.
+  * You can use the `span` keyword with the number of columns you want it to take up
+    * e.g. `grid-column: span 2`
+  * If this causes the item to take up more columns than are left on its row, it'll break to the next row and leave empty space
+  * If you give the item more columns than the grid already has, it'll add extra implicit columns to the grid
+  * It's a shorthand for `grid-column-start` and `grid-column-end`
+    * If you give them each a specific column number, the item will start at the start number and end at the end number
+      * e.g. `grid-column-start: 2; grid-column-end: 5;`
+* `grid-row` lets you control the row sizing of a grid item
+  * It works like `grid-column` but for rows
