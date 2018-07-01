@@ -95,6 +95,7 @@
   * You can use the `span` keyword with the number of columns you want it to take up
     * e.g. `grid-column: span 2`
   * If this causes the item to take up more columns than are left on its row, it'll break to the next row and leave empty space
+    * Unless you use `grid-auto-flow: dense`, which causes items after this one to fill in the empty space before it
   * If you give the item more columns than the grid already has, it'll add extra implicit columns to the grid
   * It's a shorthand for `grid-column-start` and `grid-column-end`
     * If you give them each a specific column number, the item will start at the start number and end at the end number
@@ -122,3 +123,16 @@
   * e.g. `grid-template-columns: [columns-start] 100px [columns-middle] 100px [columns-end];`
 * Reference example:
   * `grid-column: columns-start / columns-end` to have an item take up all columns
+
+### Aligning Things
+
+* Grid provides several `justify-*` and `align-*` properties
+  * `justify` affects the row axis
+  * `align` affects the column axis
+* Use `justify-items` and `align-items` on the grid container to define alignment of grid items within their tracks
+  * Default value for both is `stretch`
+  * Can also take `start`, `end`, or `center` values
+* Use `justify-content` and `align-content` when your grid container has more space than the grid items take up
+  * You can use them to vertically or horizontally center the enter group of items
+  * You can also spread tracks apart with `space-between` or `space-around`
+* Use `justify-self` or `align-self` to override the alignment of a particular grid item
