@@ -69,6 +69,22 @@
     * But if you give the grid container a height greater than all its items, they'll grow to take up the container's height
 * If you use `auto` on a row or column, its items will grow to the height or width of the content of the largest item
 
+#### Dynamically Sizing Tracks
+
+* `auto-fill` lets grid increase or decrease the number of columns or rows based on the space available
+  * It is passed as an argument to `repeat()`
+  * e.g. `grid-template-columns: repeat(auto-fill, 150px)` will create as many 150px wide columns as will fill the width of the grid container
+  * It causes the grid to respond to changes in viewport size
+* `auto-fit` is like `auto-fill`, but it will collapse any implicitly created columns
+* `minmax()` lets you dynamically size the width of a column
+  * It takes a minimum size arg and a maximum size arg
+    * A minimum pixel width and a maximum fractional width work well
+  * It is passed as an argument to `repeat()`
+  * e.g. `grid-template-columns: repeat(auto-fit, minmax(150px, 1fr))`
+    * This will cause each column to be the same size and grow to fill up all available space but not shrink below 150px
+    * You have to use `auto-fit`, as `auto-fill` won't grow the columns to take up all available space
+
+
 ### Sizing Grid Items
 
 * `grid-column` lets you control the column sizing of a grid item
@@ -85,3 +101,24 @@
       * e.g. `grid-column-start: 2; grid-column-end: 5;`
 * `grid-row` lets you control the row sizing of a grid item
   * It works like `grid-column` but for rows
+
+### Grid Areas
+
+* An area is a named section of the grid
+* `grid-template-areas` defines the areas
+  * It takes a string for each row
+  * e.g. For a 3 x 3 grid, you could name three column areas:
+    * `grid-template-areas: "sidebar-1 content sidebar-2" "sidebar-1 content sidebar-2" "footer footer footer"`
+  * You can use it to define your grid instead of `grid-template-columns` and `grid-template-rows`
+* `grid-area` assigns a grid item to an area by its name
+  * e.g. `grid-area: footer`
+* You can refer to area names when defining where a track starts and ends
+  * You can refer to the start of an area with `areaname-start` and the end with `areaname-end`
+
+### Naming Lines
+
+* You can name the lines before and after a column or row so you can refer to them by name later
+* Definition syntax: `[line-name] trackSize`
+  * e.g. `grid-template-columns: [columns-start] 100px [columns-middle] 100px [columns-end];`
+* Reference example:
+  * `grid-column: columns-start / columns-end` to have an item take up all columns
