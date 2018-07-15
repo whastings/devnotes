@@ -102,6 +102,7 @@
       * e.g. `grid-column-start: 2; grid-column-end: 5;`
 * `grid-row` lets you control the row sizing of a grid item
   * It works like `grid-column` but for rows
+* You can make grid items overlay each other if you place them on the same row and column
 
 ### Grid Areas
 
@@ -136,3 +137,8 @@
   * You can use them to vertically or horizontally center the enter group of items
   * You can also spread tracks apart with `space-between` or `space-around`
 * Use `justify-self` or `align-self` to override the alignment of a particular grid item
+
+### Ordering Grid Items
+
+* Use the `order` property
+  * It defaults to `0`, with smaller numbers coming first
