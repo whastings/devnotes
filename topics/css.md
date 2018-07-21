@@ -56,6 +56,8 @@
 * You can use `grid-auto-columns` and `grid-auto-rows` to define the size of implicitly defined columns and rows
 * `grid-auto-flow` tells Grid if extra items should implicitly end up in new rows or new columns
   * The default is `row`
+  * This is handy if you want to size the first column to take up all free space and the rest to take just what's needed for their content
+    * `grid-template-columns: 1fr; grid-auto-flow: column;`
 
 ### Sizing Tracks
 
@@ -142,3 +144,23 @@
 
 * Use the `order` property
   * It defaults to `0`, with smaller numbers coming first
+
+### Compared to Flexbox
+
+* Flexbox makes it easier to place a variable number of items in a row or column with one of them growing bigger than the others
+  * e.g. `flex-grow: 1` on the item to grow bigger vs. `grid-template-columns: auto auto 1fr auto auto`
+* Grid needs one fewer properties to vertically and horizontally center something
+  * `display: grid; justify-items: center; align-content: center;`
+* Only Flexbox can easily have items in wrapped rows align differently than items in previous row
+  * Grid columns are more rigid
+* Grid is better at consistently wrapping an unknown number of items across multiple rows
+  * With `repeat(auto-fex, minmax(...));`
+
+## CSS Variables
+
+* `--varname: value;` declares a variable
+  * Can be set on any selector
+  * To apply to whole document, set on the `:root` selector
+  * Can also be set via inline styles
+* `property: var(--varname);` sets property to the value of the variable
+  * `var(--varname, defaultValue)` will fall back to a default value if the variable isn't set
