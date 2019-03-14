@@ -1,5 +1,26 @@
 # Terraform
 
+* Tool/programming language for setting up cloud resources
+  * Can do AWS and others
+* Is a declarative language for saying what state you want your resources to look like
+  * It keeps track of what needs to be updated
+
+## Resource
+
+* Something Terraform can create, manage, and destroy
+* e.g. Instance, load balancer, security group
+* Each has a type, name, and zero or more parameters
+* Resource definitions can refer to variables that come from other resources definitions
+* Form a DAG representing the relationships between resources
+  * e.g. You need to create a volume before you create an attachment
+
+## Module
+
+* A reusable group of resources
+* Kind of like a function
+* Can take parameters you can use to fill in details of resources
+* A module can reference another module and reuse its resource definitions
+
 ## Commands
 
 * `terraform apply`: Run your configs against your provider
