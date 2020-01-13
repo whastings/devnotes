@@ -3,15 +3,8 @@
 These are the resources I recommend to new Web Devs when they ask me how to get
 started.
 
-**Note:** Most of these resources are free, but a few aren't. In particular,
-[Code School][code_school] is $30/month, but its web dev courses are excellent
-for beginners.
-
-[code_school]: https://www.codeschool.com/
-
 ## HTML & CSS:
 
-* [Code School’s HTML/CSS Curriculum][cs_html_css]
 * [HTML Dog’s HTML Tutorial][html_dog_html]
 * [Learn to Code HTML & CSS][learn_code_html_css]
 * [HTML Dog’s CSS Tutorial][html_dog_css]
@@ -20,7 +13,6 @@ for beginners.
 * [Learn CSS Layout][learn_layout]
 * [Understanding CSS: Selector Specificity][selector_specificity]
 
-[cs_html_css]: https://www.codeschool.com/paths/html-css
 [html_dog_html]: http://htmldog.com/guides/html/
 [learn_code_html_css]: http://learn.shayhowe.com/
 [html_dog_css]: http://htmldog.com/guides/css/
@@ -31,18 +23,16 @@ for beginners.
 
 ## JavaScript
 
-* [Code School’s JavaScript Curriculum][cs_js] (some free courses)
 * [Basic JavaScript for the impatient programmer][2ality_js]
 * [HTML Dog’s JavaScript Tutorial][html_dog_js]
 * [JavaScript on Kirupa.com][kirupa_js]
-* [:book: You Don't Know JS: Up & Going][ydkjs]
+* [:book: You Don't Know JS: Get Started][ydkjs]
 * [jQuery Fundamentals][jq_fund]
 
-[cs_js]: https://www.codeschool.com/paths/javascript
 [2ality_js]: http://www.2ality.com/2013/06/basic-javascript.html
 [html_dog_js]: http://htmldog.com/guides/javascript/
 [kirupa_js]: http://www.kirupa.com/html5/learn_javascript.htm
-[ydkjs]: https://github.com/getify/You-Dont-Know-JS/tree/master/up%20%26%20going
+[ydkjs]: https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/get-started/README.md
 [jq_fund]: http://jqfundamentals.com/
 
 ## The Command Line
@@ -59,11 +49,9 @@ for beginners.
 
 * [git - the simple guide][git_simple]
 * [Git Immersion][git_immerse]
-* [Code School's Try Git course][cs_git] (free)
 
 [git_simple]: http://rogerdudler.github.io/git-guide/
 [git_immerse]: http://gitimmersion.com/
-[cs_git]: https://www.codeschool.com/courses/try-git
 
 ## Other
 
