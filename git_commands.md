@@ -138,7 +138,7 @@
   * Check your repo's reflog (where your HEAD has been)
 * `git log -p`
   * Show the diff after each commit record
-* `git log -S "search"`
+* `git log -S "search" --source --all`
   * Search through commit content
 * `git log branch1 --not branch2`
   * List commits that are in branch1 but not in branch2
